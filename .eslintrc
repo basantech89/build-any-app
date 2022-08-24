@@ -1,14 +1,42 @@
 {
   "parserOptions": {
-    "ecmaVersion": "latest",
+    "ecmaVersion": 2022,
     "sourceType": "module"
   },
-  "extends": ["eslint:recommended", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "prettier"
+  ],
   "rules": {
-    "strict": ["error", "never"]
+    "strict": [
+      "error",
+      "never"
+    ]
   },
   "env": {
     "browser": false,
     "node": true
-  }
+  },
+  "overrides": [
+    {
+      "files": "**/*.+(ts)",
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": "./tsconfig.json" // where our typescript configuration is
+      },
+      "plugins": [
+        "@typescript-eslint/eslint-plugin"
+      ],
+      "extends": [
+        "plugin:@typescript-eslint/eslint-recommended",
+        // disable some not necessary rules that typescript renders unnecessary
+        "plugin:@typescript-eslint/recommended",
+        "prettier"
+        // "prettier/@typescript-eslint(merged into prettier) is able to disable rules from typescript-eslint that are not necessary
+      ],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
 }
