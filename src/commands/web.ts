@@ -1,18 +1,16 @@
 #!/usr/bin/env ts-node
 
-import { ArgumentsCamelCase, string } from 'yargs'
-
-declare interface WebArguments {
-	framework: string
-	ui: string
-	stateLibrary: string
+export declare interface WebArguments {
+	framework: 'react'
+	ui: 'awesome-ui' | 'material-ui' | 'chakra' | 'reactstrap' | 'react-bootstrap'
+	stateLibrary: 'redux'
 }
 
-exports.command = 'web [framework] [ui] [stateLibrary]'
-exports.desc = 'Create a web application'
-exports.builder = {
+export const command = 'web [framework] [ui] [stateLibrary]'
+export const desc = 'Create a web application'
+export const builder = {
 	framework: {
-		choices: ['react'] as const,
+		choices: ['react'],
 		alias: 'f',
 		describe: 'The framework you want to use for your web application.',
 	},
@@ -35,6 +33,6 @@ exports.builder = {
 	},
 }
 
-exports.handler = function (args: ArgumentsCamelCase<WebArguments>) {
+export function handler(args: WebArguments) {
 	console.log('web command args', args)
 }

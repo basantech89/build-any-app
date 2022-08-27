@@ -1,6 +1,6 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env node
 
-const createApp = require('./create-app')
+import createApp from './create-app'
 
 const currentNodeVersion = process.version
 const semver = currentNodeVersion.split('.')
@@ -10,9 +10,10 @@ if (major < 14) {
 	console.error(
 		`You are running TS Node ${currentNodeVersion}\n
     Create Web App requires TS Node 14 or higher.\n
-    Please update your version of TS Node.`,
+    Please update your version of TS Node.`
 	)
 	process.exit(1)
 }
 
-createApp()
+const parser = createApp()
+parser.argv
