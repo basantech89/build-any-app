@@ -1,10 +1,13 @@
 #!/usr/bin/env ts-node
 
-const yargs = require('yargs/yargs')
-const { hideBin } = require('yargs/helpers')
+import yargs from 'yargs/yargs'
 
-module.exports = function () {
-	yargs(hideBin(process.argv))
+import { hideBin } from 'yargs/helpers'
+
+const program = yargs(hideBin(process.argv))
+
+const createApp = () =>
+	program
 		.scriptName('create-app')
 		.usage('Usage: $0 <command> [options]')
 		.example('$0 web -f react -u awesome-ui -s redux my-app')
@@ -14,15 +17,15 @@ module.exports = function () {
 			describe: 'Project name',
 			type: 'string',
 		})
-		.handler.demandCommand(1)
+		.demandCommand(1)
 		.commandDir('commands', {
-			extensions:
-				process.env.NODE_ENV === 'development' ? ['js', 'ts'] : ['js'],
+			extensions: process.env.NODE_ENV !== 'production' ? ['js', 'ts'] : ['js'],
 		})
 		.recommendCommands()
 		.wrap(120)
 		.alias('version', 'v')
 		.alias('h', 'help')
 		.help()
-		.strict().argv
-}
+		.strict()
+
+export default createApp

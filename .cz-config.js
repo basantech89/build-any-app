@@ -10,7 +10,7 @@ module.exports = {
 		},
 		{
 			value: ':recycle: refactor',
-			name: '♻️  refactor:\tCode change that neither fixes a bug nor adds a feature',
+			name: '♻️ refactor:\tCode change that neither fixes a bug nor adds a feature',
 		},
 		{
 			value: ':zap: perf',

@@ -1,8 +1,9 @@
 {
 	"compilerOptions": {
 		"target": "ESNext",
-		"module": "CommonJS",
+		"module": "Node16",
 		"strict": true,
+		"esModuleInterop": true,
 		"baseUrl": "./src", // where to look for typescript files
 		"noEmit": true, // we just want to do type checking, not compile since bable is already compiling our files
 		"skipLibCheck": true // skip type checking for .d.ts files (to skip node_modules),
