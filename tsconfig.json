@@ -1,12 +1,19 @@
 {
 	"compilerOptions": {
-		"target": "ESNext",
-		"module": "Node16",
+		"target": "ES5",
+		"module": "CommonJS",
 		"strict": true,
+		"rootDir": ".",
 		"esModuleInterop": true,
-		"baseUrl": "./src", // where to look for typescript files
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": "./src", // where to look for typescript files,
+		"moduleResolution": "Node",
 		"noEmit": true, // we just want to do type checking, not compile since bable is already compiling our files
-		"skipLibCheck": true // skip type checking for .d.ts files (to skip node_modules),
+		"skipLibCheck": true, // skip type checking for .d.ts files (to skip node_modules),
+		"paths": {
+			"utils/*": ["./utils/*"],
+			"utils/prompts/*": ["./utils/prompts/*"]
+		}
 	},
 	"exclude": ["node_modules", "dist"]
 }
