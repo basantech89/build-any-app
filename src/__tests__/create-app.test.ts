@@ -1,6 +1,5 @@
-import { runCli } from 'utils'
-
 import { describe, expect, test } from '@jest/globals'
+import { runCli } from 'utils'
 
 describe('Help Output', () => {
 	test('create-app command returns help output', async () => {

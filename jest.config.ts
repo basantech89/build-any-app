@@ -3,14 +3,22 @@ import { Config } from '@jest/types'
 const path = require('path')
 
 const config: Config.InitialOptions = {
-	moduleDirectories: ['node_modules', path.join(__dirname, '/src'), 'utils'],
+	testEnvironment: 'jest-environment-node',
+	moduleDirectories: [
+		'node_modules',
+		path.join(__dirname, 'src'),
+		'utils',
+		'utils/prompts',
+	],
+	modulePathIgnorePatterns: ['dist'],
+	setupFilesAfterEnv: ['<rootDir>/src/mocks/index.ts'],
 	collectCoverageFrom: ['**/src/**/*.ts'],
 	coverageThreshold: {
 		global: {
-			statements: 55,
-			branches: 25,
-			functions: 80,
-			lines: 55,
+			statements: 30,
+			branches: 13,
+			functions: 20,
+			lines: 30,
 		},
 	},
 }
