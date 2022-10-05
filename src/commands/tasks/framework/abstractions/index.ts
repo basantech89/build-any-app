@@ -1,16 +1,14 @@
-import { writeToRoot } from '../../../../utils'
+import { writeToRoot } from 'utils'
 
-import layouts from './layouts'
 import routes from './routes'
 import utils from './utils'
 
 export declare interface AppStructure {
 	routes: () => AppStructure
-	layouts: () => AppStructure
 	utils: () => AppStructure
 }
 
-const setupAppStructure = (useJest: boolean) => {
+const setupAbstractions = (useJest: boolean) => {
 	writeToRoot(
 		'src/index.tsx',
 		`
@@ -56,9 +54,8 @@ const setupAppStructure = (useJest: boolean) => {
 
 	return {
 		routes,
-		layouts,
 		utils,
 	}
 }
 
-export default setupAppStructure
+export default setupAbstractions

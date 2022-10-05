@@ -1,8 +1,8 @@
 import { readJsonFromRoot, writeObjToRoot } from '../../../utils'
 import { TaskArgs } from '..'
 
+import setupAbstractions from './abstractions'
 import createStaticContent from './static-content'
-import setupAppStructure from './template'
 
 const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 	const { useTs, useEslint, usePrettier, useJest, framework } = libs
@@ -65,8 +65,8 @@ const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 	const content = createStaticContent()
 	content.public().gitignore().env().readme()
 
-	const structure = setupAppStructure(useJest)
-	structure.routes().layouts().utils()
+	const abstractions = setupAbstractions(useJest)
+	abstractions.routes().utils()
 }
 
 export default framework

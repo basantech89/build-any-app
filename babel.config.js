@@ -4,7 +4,7 @@ const config = api => {
 	return {
 		ignore: isTest
 			? ['dist']
-			: ['src/__tests__', 'src/mocks', 'src/global.d.ts'],
+			: ['dist', 'src/__tests__', 'src/mocks', 'src/global.d.ts'],
 		presets: [
 			[
 				'@babel/preset-env',
@@ -19,7 +19,7 @@ const config = api => {
 		],
 		plugins: [
 			[
-				'module-resolver',
+				require.resolve('babel-plugin-module-resolver'),
 				{
 					root: ['./src'],
 					alias: {

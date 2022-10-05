@@ -1,4 +1,3 @@
-import { runCommands } from './../utils/index'
 import { frameworkPrompt, globalStateLibPrompt, uiLibPrompt } from './prompts'
 import createTasks from './tasks'
 
@@ -68,6 +67,7 @@ const webCommand = {
 			.jest()
 			.babel()
 			.typescript()
+			.ui()
 
 		// console.log('deps', deps, devDeps)
 

@@ -1,5 +1,6 @@
-import { describe, expect, test } from '@jest/globals'
 import { getFileAssets, isBinaryExist } from 'utils'
+
+import { describe, expect, test } from '@jest/globals'
 
 describe('which', () => {
 	test("isBinaryExist returns binaries that doesn't exist", async () => {

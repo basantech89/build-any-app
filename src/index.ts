@@ -1,10 +1,6 @@
-#!/usr/bin/env ts-node
-
-import 'dotenv/config'
-
-import { gracefullyExit } from './utils/handlers'
+import { gracefullyExit } from 'utils/handlers'
 import createApp from './create-app'
-import { isBinaryExist } from './utils'
+import { isBinaryExist } from 'utils'
 
 const currentNodeVersion = process.version
 const semver = currentNodeVersion.split('.')

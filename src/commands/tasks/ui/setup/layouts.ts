@@ -1,7 +1,8 @@
-import { writeToRoot } from './../../../../utils/index'
-import { AppStructure } from './index'
+import { writeToRoot } from 'utils'
 
-function layouts(this: AppStructure) {
+import { UIStructure } from './index'
+
+function layouts(this: UIStructure) {
 	writeToRoot(
 		'src/layouts/AuthLayout/index.tsx',
 		`
