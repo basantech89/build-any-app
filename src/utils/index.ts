@@ -1,5 +1,3 @@
-#!/usr/bin/env ts-node
-
 import createApp from '../create-app'
 
 import { prettierConfig } from './../commands/tasks/prettier'

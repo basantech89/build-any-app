@@ -10,7 +10,7 @@ export declare interface StaticContent {
 }
 
 const createStaticContent = (): StaticContent => {
-	const content = {
+	return {
 		public: createPublicDir,
 		gitignore: function () {
 			writeToRoot(
@@ -107,8 +107,6 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 			return this
 		},
 	}
-
-	return content
 }
 
 export default createStaticContent

@@ -4,6 +4,7 @@ import framework from './framework'
 import jestTask from './jest'
 import prettier from './prettier'
 import typescript from './typescript'
+import uiTask from './ui'
 
 export interface TaskCommon {
 	deps: string[]
@@ -27,12 +28,13 @@ declare type Task<T> = () => T
 declare type TaskFn = (tools: TaskArgs) => void
 
 declare type Tasks = {
-	eslint: Task<Tasks>
 	framework: Task<Tasks>
+	eslint: Task<Tasks>
 	jest: Task<Tasks>
 	prettier: Task<Tasks>
 	babel: Task<Tasks>
 	typescript: Task<Tasks>
+	ui: Task<Tasks>
 } & TaskCommon
 
 declare type ExtraTools = {
@@ -67,18 +69,17 @@ const createTasks = (tools: string[], extraTools: ExtraTools): Tasks => {
 		}
 	}
 
-	const tasks = {
+	return {
 		deps,
 		devDeps,
-		framework: createTask(framework),
 		eslint: createTask(eslint),
 		jest: createTask(jestTask),
 		prettier: createTask(prettier),
 		babel: createTask(babel),
 		typescript: createTask(typescript),
+		framework: createTask(framework),
+		ui: createTask(uiTask),
 	}
-
-	return tasks
 }
 
 export default createTasks

@@ -1,11 +1,9 @@
-#!/usr/bin/env ts-node
-
 import webCommand from './commands/web'
-import { projectNamePrompt, staticToolsPrompt } from './utils/prompts'
-import { greenLogger, runCommands } from './utils'
 
+import { greenLogger, runCommands } from 'utils'
+import { projectNamePrompt, staticToolsPrompt } from 'utils/prompts'
+import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import yargs from 'yargs/yargs'
 
 const program = yargs(hideBin(process.argv))
 
