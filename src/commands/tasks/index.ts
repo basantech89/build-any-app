@@ -69,7 +69,7 @@ const createTasks = (tools: string[], extraTools: ExtraTools): Tasks => {
 		}
 	}
 
-	const tasks = {
+	return {
 		deps,
 		devDeps,
 		eslint: createTask(eslint),
@@ -80,8 +80,6 @@ const createTasks = (tools: string[], extraTools: ExtraTools): Tasks => {
 		framework: createTask(framework),
 		ui: createTask(uiTask),
 	}
-
-	return tasks
 }
 
 export default createTasks

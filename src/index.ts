@@ -1,6 +1,7 @@
-import { gracefullyExit } from 'utils/handlers'
 import createApp from './create-app'
+
 import { isBinaryExist } from 'utils'
+import { gracefullyExit } from 'utils/handlers'
 
 const currentNodeVersion = process.version
 const semver = currentNodeVersion.split('.')

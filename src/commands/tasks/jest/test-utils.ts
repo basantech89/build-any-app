@@ -1,4 +1,4 @@
-import { writeToRoot } from '../../../utils'
+import { writeToRoot } from 'utils'
 
 const setupTestUtils = (useEslint: boolean) => {
 	writeToRoot(
@@ -39,7 +39,8 @@ const setupTestUtils = (useEslint: boolean) => {
           '!**/utils/__tests__/*.(ts|tsx)'
         ],
         moduleNameMapper: {
-          '\\.(css|scss)$': require.resolve('./style-mock.ts')
+          "\\\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+          '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
         },
         setupFilesAfterEnv: ['<rootDir>/test-utils/setupTests.ts'],
         coverageDirectory: path.join(__dirname, '../coverage/client')
@@ -47,6 +48,13 @@ const setupTestUtils = (useEslint: boolean) => {
 
       module.exports = config
     `
+	)
+
+	writeToRoot(
+		'src/__mocks__/fileMock.ts',
+		`
+			module.exports = 'test-file-stub'
+		`
 	)
 
 	writeToRoot(

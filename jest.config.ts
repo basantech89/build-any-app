@@ -15,10 +15,10 @@ const config: Config.InitialOptions = {
 	collectCoverageFrom: ['**/src/**/*.ts'],
 	coverageThreshold: {
 		global: {
-			statements: 30,
+			statements: 25,
 			branches: 13,
-			functions: 20,
-			lines: 30,
+			functions: 15,
+			lines: 25,
 		},
 	},
 }

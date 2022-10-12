@@ -1,11 +1,14 @@
-import { writeToRoot } from 'utils'
-
+import constants from './constants'
 import routes from './routes'
 import utils from './utils'
+
+import { writeToRoot } from 'utils'
 
 export declare interface AppStructure {
 	routes: () => AppStructure
 	utils: () => AppStructure
+	constants: () => AppStructure
+	state: () => AppStructure
 }
 
 const setupAbstractions = (useJest: boolean) => {
@@ -55,6 +58,7 @@ const setupAbstractions = (useJest: boolean) => {
 	return {
 		routes,
 		utils,
+		constants,
 	}
 }
 

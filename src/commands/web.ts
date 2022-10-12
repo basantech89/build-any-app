@@ -1,8 +1,6 @@
 import { frameworkPrompt, globalStateLibPrompt, uiLibPrompt } from './prompts'
 import createTasks from './tasks'
 
-import { readFileSync } from 'fs'
-import path from 'path'
 import { ArgumentsCamelCase } from 'yargs'
 
 declare interface WebArguments {
@@ -69,25 +67,8 @@ const webCommand = {
 			.typescript()
 			.ui()
 
-		// console.log('deps', deps, devDeps)
-
-		const rowPackageJson = readFileSync(
-			path.join(global.rootDir, 'package.json'),
-			'utf8'
-		)
-
-		// runCommands(
-		// 	`prettier --config ${global.rootDir}/prettier.config.js  --write ${global.rootDir}`
-		// )
-
 		// await runCommands(`yarn add ${deps.join(' ')}`)
 		// await runCommands(`yarn add -D ${devDeps.join(' ')}`)
-		// const pkgJson = JSON.parse(rowPackageJson)
-		// pkgJson.dependencies = deps.sort()
-		// pkgJson.devDependencies = devDeps.sort()
-		//
-		// const stringifiedJson = JSON.stringify(pkgJson, null, 2)
-		// writeFileSync(path.join(global.rootDir, 'package.json'), stringifiedJson)
 	},
 }
 
