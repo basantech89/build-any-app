@@ -1,8 +1,8 @@
 import { writeToRoot } from 'utils'
 
-const setupTestUtils = (useEslint: boolean) => {
+const setupTestUtils = (useEslint: boolean, useTs: boolean) => {
 	writeToRoot(
-		'test-utils/jest-common.ts',
+		'src/test-utils/jest-common.ts',
 		`
       import { Config } from '@jest/types'
       import path from 'path'
@@ -24,7 +24,7 @@ const setupTestUtils = (useEslint: boolean) => {
 	)
 
 	writeToRoot(
-		'test-utils/jest-client.ts',
+		'src/test-utils/jest.client.ts',
 		`
       import { Config } from '@jest/types'
       import path from 'path'
@@ -39,7 +39,9 @@ const setupTestUtils = (useEslint: boolean) => {
           '!**/utils/__tests__/*.(ts|tsx)'
         ],
         moduleNameMapper: {
-          "\\\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+          "\\\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test-utils/fileMock.${
+						useTs ? 't' : 'j'
+					}s",
           '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
         },
         setupFilesAfterEnv: ['<rootDir>/test-utils/setupTests.ts'],
@@ -51,14 +53,14 @@ const setupTestUtils = (useEslint: boolean) => {
 	)
 
 	writeToRoot(
-		'src/__mocks__/fileMock.ts',
+		'src/test-utils/fileMock.ts',
 		`
-			module.exports = 'test-file-stub'
+			export default 'test-file-stub'
 		`
 	)
 
 	writeToRoot(
-		'test-utils/jest-utils.ts',
+		'src/test-utils/jest.utils.ts',
 		`
       import { Config } from '@jest/types'
       import path from 'path'
@@ -76,7 +78,7 @@ const setupTestUtils = (useEslint: boolean) => {
 	)
 
 	writeToRoot(
-		'test-utils/jest-lint.ts',
+		'src/test-utils/jest.lint.ts',
 		`
       import { Config } from '@jest/types'
 
@@ -92,13 +94,13 @@ const setupTestUtils = (useEslint: boolean) => {
 	)
 
 	writeToRoot(
-		'test-utils/setupTests.ts',
+		'src/test-utils/setupTests.ts',
 		`
       import '@testing-library/jest-dom/extend-expect'
       import 'jest-axe/extend-expect'
       import 'whatwg-fetch'
 
-      import { server } from '../mocks/server'
+      import { server } from 'mocks/server'
 
       // Establish API mocking before all tests.
       beforeAll(() => server.listen())
@@ -113,15 +115,14 @@ const setupTestUtils = (useEslint: boolean) => {
 	)
 
 	writeToRoot(
-		'test-utils/index.tsx',
+		'src/test-utils/index.tsx',
 		`
-      import store from '../redux-store'
-
-      import { render as rtlRender, RenderOptions } from '@testing-library/react'
-      import React, { FC, ReactElement } from 'react'
-      import { Provider } from 'react-redux'
-      import { MemoryRouter } from 'react-router-dom'
-      import { RecoilRoot } from 'recoil'
+    import { render as rtlRender, RenderOptions } from '@testing-library/react'
+    import React, { FC, ReactElement } from 'react'
+    import { Provider } from 'react-redux'
+    import { MemoryRouter } from 'react-router-dom'
+    import { RecoilRoot } from 'recoil'
+    import store from 'store'
 
       const render = (
         ui: ReactElement,
@@ -152,20 +153,21 @@ const setupTestUtils = (useEslint: boolean) => {
 
       const config: Config.InitialOptions = {
         ...require('./src/test-utils/jest-common.ts'),
-        collectCoverageFrom: ['**/src/**/*.{ts|tsx}'],
+        // TODO: fix coverage configuration
+        // collectCoverageFrom: ['**/src/**/*.{ts|tsx}'],
         coverageThreshold: {
           global: {
             statements: 55,
             branches: 25,
             functions: 80,
             lines: 55
-          },
-          './src/utils/*.(ts|tsx)': {
-            statements: 100,
-            branches: 100,
-            functions: 100,
-            lines: 100
           }
+          // './src/utils/*.(ts|tsx)': {
+          //   statements: 100,
+          //   branches: 100,
+          //   functions: 100,
+          //   lines: 100
+          // }
         },
         projects: [
           '<rootDir>/test-utils/jest.client.ts',

@@ -1,4 +1,4 @@
-import { UIStructure } from '../index'
+import { UIStructure } from '..'
 
 import button from './button'
 import form from './form'

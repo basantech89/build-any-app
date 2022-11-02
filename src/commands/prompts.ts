@@ -23,7 +23,7 @@ export const uiLibPrompt = new AutoComplete({
 	choices: uiLibs,
 })
 
-export const globalStates = ['redux']
+export const globalStates = ['redux', 'zustand']
 export const globalStateLibPrompt = new AutoComplete({
 	name: 'stateLibrary',
 	message:

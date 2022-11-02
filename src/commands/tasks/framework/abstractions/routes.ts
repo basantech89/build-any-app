@@ -1,71 +1,51 @@
-import { writeToRoot } from './../../../../utils'
-import { AppStructure } from './index'
+import { AppStructure } from '.'
+
+import { writeToRoot } from 'utils'
 
 function routes(this: AppStructure) {
 	writeToRoot(
 		'src/containers/AppRoutes.tsx',
 		`
-          import { routes } from '../constants/routes'
-          import AuthLayout from '../layouts/AuthLayout'
-          import ErrorLayout from '../layouts/ErrorLayout'
-          import ProtectedLayout from '../layouts/ProtectedLayout'
-          import Login from '../pages/Login'
-          import Signup from '../pages/Signup'
-          import Users from '../pages/Users'
+      import { routes } from '../constants/routes'
+      import AuthLayout from '../layouts/AuthLayout'
+      import ErrorLayout from '../layouts/ErrorLayout'
+      import ProtectedLayout from '../layouts/ProtectedLayout'
 
-          import React from 'react'
-          import { Navigate, Route, Routes } from 'react-router-dom'
+      import React from 'react'
+      import { Navigate, Route, Routes } from 'react-router-dom'
 
-          const Error = () => (
-            <div className="error-container">
-              <div className="err-common-img error-img" />
-              <div className="error-msg">You don't have access to this page.</div>
-            </div>
-          )
+      const Login = React.lazy(() => import('../pages/Login'))
+      const SignUp = React.lazy(() => import('../pages/SignUp'))
+      const Users = React.lazy(() => import('../pages/Users'))
+      const Todos = React.lazy(() => import('../pages/Todos'))
 
-          const Nomatch = () => (
-            <div className="error-container">
-              <div className="err-common-img no-match-img" />
-              <div className="error-msg">Page Not Found.</div>
-            </div>
-          )
+      const Error = React.lazy(() => import('./Error'))
+      const NoMatch = React.lazy(() => import('./NoMatch'))
 
-          const AppRoutes = () => {
-            return (
-              <React.Fragment>
-                <Routes>
-                  <Route element={<ErrorLayout />}>
-                    <Route path={routes.error} element={<Error />} />
-                    <Route path="*" element={<Nomatch />} />
-                  </Route>
-                  <Route element={<AuthLayout />}>
-                    <Route path={routes.home} element={<Navigate replace to={routes.login} />} />
-                    <Route path={routes.login} element={<Login />} />
-                    <Route path={routes.signup} element={<Signup />} />
-                  </Route>
-                  <Route element={<ProtectedLayout />}>
-                    <Route path={routes.users} element={<Users />} />
-                  </Route>
-                </Routes>
-              </React.Fragment>
-            )
-          }
+      const AppRoutes = () => {
+        return (
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+              <Route element={<ErrorLayout />}>
+                <Route path={routes.error} element={<Error />} />
+                <Route path="*" element={<NoMatch />} />
+              </Route>
+              <Route element={<AuthLayout />}>
+                <Route path={routes.home} element={<Navigate replace to={routes.login} />} />
+                <Route path={routes.login} element={<Login />} />
+                <Route path={routes.signUp} element={<SignUp />} />
+              </Route>
+              <Route element={<ProtectedLayout />}>
+                <Route path={routes.users} element={<Users />} />
+                <Route path={routes.todos} element={<Todos />} />
+              </Route>
+            </Routes>
+          </React.Suspense>
+        )
+      }
 
-          export default AppRoutes
-        `
-	)
-
-	writeToRoot(
-		'src/constants/routes.ts',
-		`
-          export const routes = {
-            home: '/',
-            users: '/users',
-            error: '/error',
-            login: '/login',
-            signup: '/signup'
-          }
-        `
+      export default AppRoutes
+    `
 	)
 
 	return this

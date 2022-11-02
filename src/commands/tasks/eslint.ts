@@ -50,6 +50,7 @@ const eslint = ({ devDeps, libs }: TaskArgs) => {
 			'plugin:@typescript-eslint/recommended'
 		)
 		devDeps.push(
+			'eslint',
 			'@typescript-eslint/eslint-plugin',
 			'@typescript-eslint/parser'
 		)
@@ -64,7 +65,7 @@ const eslint = ({ devDeps, libs }: TaskArgs) => {
 		eslintConfig.extends.push('plugin:prettier/recommended')
 	}
 
-	writeObjToRoot('eslint.config.js', eslintConfig)
+	writeObjToRoot('.eslintrc', eslintConfig)
 }
 
 export default eslint

@@ -1,6 +1,8 @@
 import babel from './babel'
+import commitizen from './commitizen'
 import eslint from './eslint'
 import framework from './framework'
+import husky from './husky'
 import jestTask from './jest'
 import prettier from './prettier'
 import typescript from './typescript'
@@ -18,9 +20,10 @@ export declare interface TaskArgs extends TaskCommon {
 		usePrettier: boolean
 		useEslint: boolean
 		useBabel: boolean
+		useCommitizen: boolean
 		framework?: string
-		ui?: string
-		globalState?: string
+		uiLib?: string
+		globalStateLib?: string
 	}
 }
 
@@ -35,12 +38,14 @@ declare type Tasks = {
 	babel: Task<Tasks>
 	typescript: Task<Tasks>
 	ui: Task<Tasks>
+	commitizen: Task<Tasks>
+	husky: Task<Tasks>
 } & TaskCommon
 
 declare type ExtraTools = {
 	framework?: string
-	ui?: string
-	globalState?: string
+	uiLib?: string
+	globalStateLib?: string
 }
 
 const createTasks = (tools: string[], extraTools: ExtraTools): Tasks => {
@@ -53,12 +58,15 @@ const createTasks = (tools: string[], extraTools: ExtraTools): Tasks => {
 		useJest: tools.includes('jest'),
 		usePrettier: tools.includes('prettier'),
 		useBabel: true || tools.includes('babel'),
+		useCommitizen: tools.includes('commitizen'),
 		...extraTools,
 	}
 
+	const tasks = ['uiTask', 'jestTask', 'framework']
+
 	function createTask(taskFn: TaskFn): () => Tasks {
 		const taskName = taskFn.name
-		const isTaskAllowed = tools.includes(taskName) || taskName in extraTools
+		const isTaskAllowed = tools.includes(taskName) || tasks.includes(taskName)
 
 		return function (this: Tasks) {
 			if (isTaskAllowed) {
@@ -79,6 +87,8 @@ const createTasks = (tools: string[], extraTools: ExtraTools): Tasks => {
 		typescript: createTask(typescript),
 		framework: createTask(framework),
 		ui: createTask(uiTask),
+		commitizen: createTask(commitizen),
+		husky: createTask(husky),
 	}
 }
 
