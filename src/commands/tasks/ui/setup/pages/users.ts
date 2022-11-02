@@ -1,21 +1,37 @@
 import { writeToRoot } from 'utils/index'
 
-const users = () => {
+const users = (globalStateLib?: string) => {
+	const useZustand = globalStateLib === 'zustand'
+	const useRedux = globalStateLib === 'redux'
+
 	writeToRoot(
 		'src/pages/Users/index.tsx',
 		`
       import './styles.scss'
       
-      import { useGetUsersQuery } from '../../redux-store/usersSlice'
+      ${useRedux && "import { useGetUsersQuery } from '../../store/usersSlice'"}
       
       import React from 'react'
       import { Table } from 'react-bootstrap'
+      ${useZustand && "import useUsers from 'store/users'"}
       
       const Users = () => {
-        const { data, isLoading } = useGetUsersQuery(null)
-      
-        console.log('users', data)
-      
+        ${
+					useRedux
+						? `
+                const { data, isLoading } = useGetUsersQuery(null)
+                const users = data?.users || []
+              `
+						: `
+                const { users, status, addUsers } = useUsers()
+                const isLoading = status === 'pending' || status === 'idle'
+
+                React.useEffect(() => {
+                  addUsers()
+                }, [])
+              `
+				}
+            
         return (
           <React.Fragment>
             <h6> Users </h6>
@@ -28,14 +44,14 @@ const users = () => {
                 </tr>
               </thead>
               <tbody>
-                {/*{!isLoading &&*/}
-                {/*  users.map((user, id) => (*/}
-                {/*    <tr key={id}>*/}
-                {/*      <td>{user.firstName}</td>*/}
-                {/*      <td>{user.lastName}</td>*/}
-                {/*      <td>{user.email}</td>*/}
-                {/*    </tr>*/}
-                {/*  ))}*/}
+                {!isLoading &&
+                  users.map((user, id) => (
+                    <tr key={id}>
+                      <td>{user.firstName}</td>
+                      <td>{user.lastName}</td>
+                      <td>{user.email}</td>
+                    </tr>
+                  ))}
               </tbody>
             </Table>
           </React.Fragment>
@@ -53,15 +69,15 @@ const users = () => {
         height: 100vh;
         padding: 50px;
     
-      h6 {
-        padding: 30px 0 20px;
+        h6 {
+          padding: 30px 0 20px;
+        }
+      
+        .users-table {
+          padding: 20px;
+        }
       }
-    
-      .users-table {
-        padding: 20px;
-      }
-    }
-  `
+    `
 	)
 }
 

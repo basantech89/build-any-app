@@ -73,7 +73,12 @@ export const writeObjToRoot = (
 	const file = `${global.rootDir}/${filepath}`
 	fs.outputFile(
 		file,
-		fileExtension === 'js' ? `module.exports = ${formattedObj}` : formattedObj,
+		fileExtension === 'js'
+			? `
+			// eslint-disable-next-line no-undef
+			module.exports = ${formattedObj}
+			`
+			: formattedObj,
 		options
 	)
 		.then(() => greenLogger.success(`Successfully wrote ${file}`))
@@ -85,7 +90,8 @@ export const getFileAssets = (fileLoc: string) => {
 	const file = pathArray.at(-1) as string
 	const dotIdx = file.lastIndexOf('.')
 
-	const isNoExtension = dotIdx === 0
+	const isNoExtension = dotIdx <= 0
+
 	if (isNoExtension) {
 		return { filepath: fileLoc, extension: '' }
 	}
@@ -131,6 +137,7 @@ export const prettyFormat = (
 	content: string
 ) => {
 	const useShParser = !extension || extension === 'txt'
+
 	if (useShParser) {
 		prettierConfig.parser = 'sh'
 	} else if (extension === 'md') {
@@ -141,6 +148,8 @@ export const prettyFormat = (
 		prettierConfig.parser = 'typescript'
 	} else if (extension === 'js' || extension === 'jsx') {
 		prettierConfig.parser = 'babel'
+	} else if (extension === 'html') {
+		prettierConfig.parser = 'html'
 	} else {
 		prettierConfig.filepath = filepath
 	}
@@ -175,6 +184,19 @@ export const readJsonFromRoot = (filepath: string) => {
 			warmLogger.error(
 				`Could not read from file ${file}.\nReceived error, ${err}`
 			)
+		})
+}
+
+export const copyToRoot = (srcpath: string, dest: string) => {
+	const destpath = `${global.rootDir}/${dest}`
+	return fs
+		.copy(srcpath, destpath)
+		.then(() =>
+			greenLogger.success(`Successfully copied ${srcpath} to ${destpath}`)
+		)
+		.catch(e => {
+			console.log(`Error copying ${e}`)
+			warmLogger.error(`Could not copy ${srcpath} to ${destpath}`)
 		})
 }
 

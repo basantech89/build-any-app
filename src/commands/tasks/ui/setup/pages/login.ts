@@ -6,11 +6,8 @@ const login = () => {
 		`
       import Button from 'components/Button'
       import SmartForm, { SmartButton, SmartInput } from 'components/Form'
-      
-      import './styles.scss'
-      
-      import toastState from '../../atoms/toasts'
-      
+
+      import toastState from 'atoms/toasts'
       import { routes } from 'constants/routes'
       import React from 'react'
       import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons'
@@ -23,43 +20,43 @@ const login = () => {
         email: string
         password: string
       }
-      
+
       const defaultValues: LoginForm = { email: '', password: '' }
-      
+
       const Login = () => {
         const navigate = useNavigate()
-      
+
         const [toasts, setToasts] = useRecoilState(toastState)
         const addToast = (msg: string, bg = 'success') => setToasts([...toasts, { msg, bg }])
-      
+
         const [hidePass, setHidePass] = React.useState(true)
         const toggleHidePass = () => setHidePass(!hidePass)
-      
+
         const login = async (user: LoginForm) => {
-          const { data, error } = await authenticateUser(user)
-          if (data) {
+          const { success, data } = await authenticateUser(user)
+          if (success) {
             setItem('token', data.token)
-            navigate(routes.users)
-          } else if (error) {
-            addToast(error, 'danger')
+            navigate(routes.todos)
+          } else {
+            addToast(data, 'danger')
           }
         }
-      
-        const goToSignup = () => navigate(routes.signup)
-      
+
+        const goToSignup = () => navigate(routes.signUp)
+
         return (
-          <div className="login">
+          <section className="auth">
             <SmartForm<LoginForm>
               mode="onChange"
               onSubmit={login}
               defaultValues={defaultValues}
-              className="login-form"
+              className="auth-form"
             >
               <h6>Hello there, Sign in to continue</h6>
               <SmartInput
                 label="Email"
                 name="email"
-                className="login-form-group"
+                className="auth-form-group"
                 rules={{
                   required: 'Email is required.',
                   pattern: {
@@ -72,7 +69,7 @@ const login = () => {
                 label="Password"
                 name="password"
                 type={hidePass ? 'password' : 'text'}
-                className="login-form-group"
+                className="auth-form-group"
                 append={
                   <Button
                     onClick={toggleHidePass}
@@ -88,89 +85,14 @@ const login = () => {
               />
               <SmartButton variant="primary" type="submit" label="Next" />
             </SmartForm>
-            <Button variant="link" onClick={goToSignup}>
+            <Button variant="link" linkVariant="primary" onClick={goToSignup}>
               Signup
             </Button>
-          </div>
+          </section>
         )
       }
-      
-      export default Login
-    `
-	)
 
-	writeToRoot(
-		'src/pages/Login/styles.scss',
-		`
-      .login {
-        width: 50%;
-        display: grid;
-        grid-template-rows: auto 40px;
-        padding: 20px 0;
-      
-        & > * {
-          margin: auto;
-        }
-      
-        h6 {
-          padding-bottom: 20px;
-          color: #3c415e;
-        }
-      
-        .login-form {
-          width: 50%;
-          .login-form-group {
-            padding-bottom: 10px;
-            position: relative;
-            min-height: 100px;
-      
-            label {
-              color: #9699a9;
-            }
-      
-            input.form-control {
-              height: 45px;
-              font-weight: 500;
-            }
-      
-            a {
-              color: #1a1a1a;
-              font-weight: 500;
-              text-decoration: none;
-            }
-      
-            .input-icon-btn {
-              font-size: 1.3em;
-              position: absolute;
-              top: 50%;
-              left: calc(100% - 35px);
-              transform: translateY(-50%);
-              color: #9699a9;
-      
-              svg {
-                width: 18px;
-                height: 18px;
-              }
-            }
-          }
-      
-          button[type='submit'] {
-            width: 100%;
-            height: 45px;
-            margin-top: 10px;
-          }
-        }
-      
-        .link-btn,
-        .link-btn:active {
-          margin-top: auto;
-          margin-bottom: 20px;
-          font-weight: 500;
-          outline: none;
-          box-shadow: none;
-          text-decoration: none;
-        }
-      }
+      export default Login
     `
 	)
 

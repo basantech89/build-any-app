@@ -6,8 +6,7 @@ const toast = () => {
 		`
       import './styles.scss'
 
-      import toastState from '../../atoms/toasts'
-      
+      import toastState from 'atoms/toasts'      
       import React from 'react'
       import { Toast as RBToast, ToastContainer } from 'react-bootstrap'
       import { useRecoilState } from 'recoil'

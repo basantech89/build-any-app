@@ -1,6 +1,5 @@
-import { getFileAssets, isBinaryExist } from 'utils'
-
 import { describe, expect, test } from '@jest/globals'
+import { getFileAssets, isBinaryExist } from 'utils'
 
 describe('which', () => {
 	test("isBinaryExist returns binaries that doesn't exist", async () => {
@@ -42,6 +41,10 @@ describe('getFileAssets', () => {
 		expect(getFileAssets('/.dir/.dir2/.test')).toMatchObject({
 			extension: '',
 			filepath: '/.dir/.dir2/.test',
+		})
+		expect(getFileAssets('.husky/commit-msg')).toMatchObject({
+			extension: '',
+			filepath: '.husky/commit-msg',
 		})
 		expect(getFileAssets('/.dir/.dir2/.test.txt')).toMatchObject({
 			extension: 'txt',

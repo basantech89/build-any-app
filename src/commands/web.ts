@@ -1,6 +1,14 @@
-import { frameworkPrompt, globalStateLibPrompt, uiLibPrompt } from './prompts'
+import {
+	frameworkPrompt,
+	frameworks,
+	globalStateLibPrompt,
+	globalStates,
+	uiLibPrompt,
+	uiLibs,
+} from './prompts'
 import createTasks from './tasks'
 
+import { greenLogger, runCommands } from 'utils/index'
 import { ArgumentsCamelCase } from 'yargs'
 
 declare interface WebArguments {
@@ -15,23 +23,17 @@ const webCommand = {
 	desc: 'Create a web application',
 	builder: {
 		framework: {
-			choices: ['react'],
+			choices: frameworks,
 			alias: 'f',
 			describe: 'The framework you want to use for your web application.',
 		},
 		ui: {
-			choices: [
-				'awesome-ui',
-				'material-ui',
-				'chakra',
-				'reactstrap',
-				'react-bootstrap',
-			],
+			choices: uiLibs,
 			alias: 'u',
 			describe: 'The UI library you want to use for your web application.',
 		},
 		stateLibrary: {
-			choices: ['redux'],
+			choices: globalStates,
 			alias: 's',
 			describe:
 				'The global state management library you want to use for your web application.',
@@ -66,9 +68,14 @@ const webCommand = {
 			.babel()
 			.typescript()
 			.ui()
+			.commitizen()
+			.husky()
 
-		// await runCommands(`yarn add ${deps.join(' ')}`)
-		// await runCommands(`yarn add -D ${devDeps.join(' ')}`)
+		await runCommands(`yarn add ${deps.join(' ')}`)
+		greenLogger.info('Installed dependencies')
+		await runCommands(`yarn add -D ${devDeps.join(' ')}`)
+		greenLogger.info('Installed dev dependencies')
+		await runCommands(`yarn lint:fix`)
 	},
 }
 

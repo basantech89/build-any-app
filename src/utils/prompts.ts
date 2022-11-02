@@ -6,15 +6,7 @@ const { Input, MultiSelect } = enquirer
 export const staticToolsPrompt = new MultiSelect({
 	name: 'staticTools',
 	message: 'Pick the static tools you want for your application',
-	choices: [
-		'typescript',
-		'eslint',
-		'prettier',
-		'jest',
-		'husky',
-		'commitizen',
-		'commitlint',
-	],
+	choices: ['typescript', 'eslint', 'prettier', 'jest', 'commitizen', 'husky'],
 })
 
 export const projectNamePrompt = new Input({

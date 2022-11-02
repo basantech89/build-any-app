@@ -17,7 +17,8 @@ const jestTask = ({ devDeps, libs }: TaskArgs) => {
 		'jest-watch-select-projects',
 		'jest-watch-typeahead',
 		'msw',
-		'whatwg-fetch'
+		'whatwg-fetch',
+		'ts-node'
 	)
 	if (useTs) {
 		devDeps.push('@types/jest', '@types/jest', '@types/jest-axe')
@@ -27,7 +28,7 @@ const jestTask = ({ devDeps, libs }: TaskArgs) => {
 		devDeps.push('jest-runner-eslint')
 	}
 
-	setupTestUtils(useEslint)
+	setupTestUtils(useEslint, useTs)
 	setupMSW()
 }
 

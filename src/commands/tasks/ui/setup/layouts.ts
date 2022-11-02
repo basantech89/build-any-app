@@ -8,10 +8,9 @@ function layouts(this: UIStructure) {
 		`
       import './styles.scss'
 
-      import { getItem } from '../../utils'
-
       import React from 'react'
       import { Outlet, useNavigate } from 'react-router-dom'
+      import { getItem } from 'utils'
 
       const AuthLayout = () => {
         const navigate = useNavigate()
@@ -24,10 +23,10 @@ function layouts(this: UIStructure) {
         }, [])
 
         return (
-          <div className="auth-layout">
-            <div className="auth-layout-img" />
+          <main className="auth-layout">
+            <section className="auth-layout-img" />
             <Outlet />
-          </div>
+          </main>
         )
       }
 
@@ -41,10 +40,9 @@ function layouts(this: UIStructure) {
 		`
       .auth-layout {
         display: flex;
-        height: 100vh;
+        height: calc(100vh - 76px);
 
         &-img {
-          background: url(https://source.unsplash.com/random/?people,dark,black,night) no-repeat;
           min-width: 50%;
           background-size: cover;
         }
@@ -62,9 +60,9 @@ function layouts(this: UIStructure) {
 
       const ErrorLayout = () => {
         return (
-          <div className="error-layout">
+          <main className="error-layout">
             <Outlet />
-          </div>
+          </main>
         )
       }
 
@@ -76,7 +74,7 @@ function layouts(this: UIStructure) {
 		`src/layouts/ErrorLayout/styles.scss`,
 		`
       .error-layout {
-        height: 100vh;
+        height: calc(100vh - 76px);
       }
     `
 	)
@@ -86,12 +84,9 @@ function layouts(this: UIStructure) {
 		`
       import './styles.scss'
 
-      import { routes } from '../../constants/routes'
-      import { authenticate, logoutUser } from '../../utils'
-
       import React from 'react'
-      import { Button, Navbar } from 'react-bootstrap'
-      import { Link, Outlet, useNavigate } from 'react-router-dom'
+      import { Outlet, useNavigate } from 'react-router-dom'
+      import { authenticate } from 'utils'
 
       const ProtectedLayout = () => {
         const navigate = useNavigate()
@@ -104,23 +99,9 @@ function layouts(this: UIStructure) {
         }, [])
 
         return (
-          <div className="protected-layout">
-            <Navbar>
-              <Navbar.Brand href="">
-                <img
-                  src="https://drive.google.com/uc?export=view&id=1hvRAGrdq0SqFBZApx2--IcuDf-DOmOBH"
-                  alt="wissen-logo"
-                />
-              </Navbar.Brand>
-              <Link to={routes.home}>
-                <Button variant="danger" onClick={logoutUser} className="logout-btn">
-                  Logout
-                </Button>
-              </Link>
-            </Navbar>
-
+          <main className="protected-layout">
             <Outlet />
-          </div>
+          </main>
         )
       }
 
@@ -132,25 +113,9 @@ function layouts(this: UIStructure) {
 		'src/layouts/ProtectedLayout/styles.scss',
 		`
       .protected-layout {
-        height: 100vh;
-        padding: 50px;
-
-        .navbar {
-          justify-content: space-between;
-
-          img {
-            max-height: 50px;
-          }
-        }
-
-        .logout-btn {
-          a {
-            text-decoration: none;
-            color: inherit;
-          }
-        }
+        padding: 40px;
       }
-  `
+    `
 	)
 
 	return this
