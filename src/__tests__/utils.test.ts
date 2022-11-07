@@ -42,13 +42,17 @@ describe('getFileAssets', () => {
 			extension: '',
 			filepath: '/.dir/.dir2/.test',
 		})
+		expect(getFileAssets('/.dir/.dir2/.test.txt')).toMatchObject({
+			extension: 'txt',
+			filepath: '/.dir/.dir2/.test.txt',
+		})
 		expect(getFileAssets('.husky/commit-msg')).toMatchObject({
 			extension: '',
 			filepath: '.husky/commit-msg',
 		})
-		expect(getFileAssets('/.dir/.dir2/.test.txt')).toMatchObject({
-			extension: 'txt',
-			filepath: '/.dir/.dir2/.test.txt',
+		expect(getFileAssets('.github/workflows/build.yml')).toMatchObject({
+			extension: 'yml',
+			filepath: '.github/workflows/build.yml',
 		})
 	})
 

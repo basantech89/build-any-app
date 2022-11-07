@@ -1,13 +1,14 @@
 import createApp from '../create-app'
 
-import { prettierConfig } from './../commands/tasks/prettier'
 import { gracefullyExit } from './handlers'
 import { greenLogger, warmLogger } from './logger'
 
 import { transformAsync } from '@babel/core'
+import { PromptRunner } from 'enquirer'
 import execa from 'execa'
 import fs from 'fs-extra'
 import prettier from 'prettier'
+import { prettierConfig } from 'tasks/prettier'
 import { inspect } from 'util'
 import which from 'which'
 import { ArgumentsCamelCase } from 'yargs'
@@ -32,6 +33,19 @@ export const runCommands = async (...commands: string[]) => {
 			cwd: global.rootDir,
 		})
 		greenLogger.success({ command, message: `${subprocess.stdout}` })
+	} catch (e) {
+		gracefullyExit(new Error((e as { stderr: string })?.stderr), command)
+	}
+}
+
+export const runCommandsIgnoreOp = async (...commands: string[]) => {
+	const command = commands.join(' && ')
+	try {
+		await execa(command, {
+			shell: true,
+			cwd: global.rootDir,
+			stdio: 'ignore',
+		})
 	} catch (e) {
 		gracefullyExit(new Error((e as { stderr: string })?.stderr), command)
 	}
@@ -136,20 +150,24 @@ export const prettyFormat = (
 	extension: string,
 	content: string
 ) => {
-	const useShParser = !extension || extension === 'txt'
+	const extToParser = {
+		txt: 'sh',
+		md: 'mdx',
+		css: 'css',
+		scss: 'scss',
+		less: 'less',
+		ts: 'typescript',
+		tsx: 'typescript',
+		js: 'babel',
+		jsx: 'babel',
+		html: 'html',
+		yml: 'yaml',
+	}
 
-	if (useShParser) {
+	if (!extension) {
 		prettierConfig.parser = 'sh'
-	} else if (extension === 'md') {
-		prettierConfig.parser = 'mdx'
-	} else if (['css', 'scss', 'less'].includes(extension)) {
-		prettierConfig.parser = extension
-	} else if (extension === 'ts' || extension === 'tsx') {
-		prettierConfig.parser = 'typescript'
-	} else if (extension === 'js' || extension === 'jsx') {
-		prettierConfig.parser = 'babel'
-	} else if (extension === 'html') {
-		prettierConfig.parser = 'html'
+	} else if (extension in extToParser) {
+		prettierConfig.parser = extToParser[extension as keyof typeof extToParser]
 	} else {
 		prettierConfig.filepath = filepath
 	}
@@ -198,6 +216,22 @@ export const copyToRoot = (srcpath: string, dest: string) => {
 			console.log(`Error copying ${e}`)
 			warmLogger.error(`Could not copy ${srcpath} to ${destpath}`)
 		})
+}
+
+export const setArgument = async <T>(
+	argName: string,
+	prompt: PromptRunner<T>,
+	arg?: T
+) => {
+	if (typeof arg === 'undefined') {
+		if (global.interactive) {
+			arg = await prompt.run()
+		} else {
+			gracefullyExit(new Error(`${argName} is not provided`))
+		}
+	}
+
+	return arg as T
 }
 
 export { greenLogger, warmLogger }

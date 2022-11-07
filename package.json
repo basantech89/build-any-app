@@ -8,7 +8,8 @@
 	"main": "src/index.ts",
 	"scripts": {
 		"create-app": "ts-node --experimental-specifier-resolution node -T src/index.ts",
-		"build": "rimraf dist && babel src --extensions .js,.ts --out-dir dist",
+		"prebuild": "rimraf dist",
+		"build": "babel src --extensions .js,.ts --out-dir dist",
 		"lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
 		"prettier": "prettier --ignore-path .gitignore \"**/*.+(js|json|ts|md)\"",
 		"format": "npm run prettier -- --write",
