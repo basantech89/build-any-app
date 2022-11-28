@@ -1,9 +1,9 @@
-name: Coverage
+name: Build
 on: pull_request
 
 jobs:
   coverage:
-    name: Code Coverage
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

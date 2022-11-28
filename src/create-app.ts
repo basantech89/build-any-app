@@ -28,7 +28,7 @@ const program = yargs(hideBin(process.argv))
 
 const createApp = () => {
 	return program
-		.scriptName('create-app')
+		.scriptName('build-any-app')
 		.usage('Usage: $0 <command> [options]')
 		.example(
 			'$0 web -f react -u awesome-ui -s redux my-app',
