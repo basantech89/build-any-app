@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/basantech89/create-app/compare/v1.0.1...v1.0.2) (2022-11-28)
+
+
+### 🐛 Bug Fixes
+
+* **tooling:** change conflicting package name ([def4687](https://github.com/basantech89/create-app/commit/def4687b7d6bab08bfe77d23d98f99d99ca71ebb))
+
 ## [1.0.1](https://github.com/basantech89/create-app/compare/v1.0.0...v1.0.1) (2022-11-28)
 
 
