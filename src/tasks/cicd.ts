@@ -13,14 +13,14 @@ const cicd = async () => {
 		)
 
 		writeToRoot(
-			'.github/workflows/coverage.yml',
+			'.github/workflows/build.yml',
 			`
-        name: Coverage
+        name: Build
         on: pull_request
 
         jobs:
-          coverage:
-            name: Code Coverage
+          build:
+            name: Build
             runs-on: ubuntu-latest
             steps:
 	            - name: Checkout
@@ -69,14 +69,14 @@ const cicd = async () => {
 		)
 	} else if (cicdTool === 'circleci') {
 		writeToRoot(
-			'.circleci/coverage.yaml',
+			'.circleci/build.yaml',
 			`
         version: 2.1
         orbs:
           codecov: codecov/codecov@3.2.2
 
         jobs:
-          coverage:
+          build:
             docker:
               - image: 'circleci/node:latest'
             environment:
@@ -121,7 +121,7 @@ const cicd = async () => {
           version: 2
           deploy:
             jobs:
-              - coverage
+              - build
       `
 		)
 	}

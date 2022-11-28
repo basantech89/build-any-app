@@ -1,4 +1,4 @@
-# Create App
+# Build Any App
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Build](https://github.com/basantech89/create-app/actions/workflows/codecov.yml/badge.svg)](https://github.com/basantech89/create-app/actions/workflows/codecov.yml)
@@ -7,7 +7,7 @@
 
 Generate template of your app dynamically. 
 
-Create-app can run in interactive mode with the option -i through which it prompts for an option if it's not provided.
+Build-any-app can run in interactive mode with the option -i through which it prompts for an option if it's not provided.
 Non-interactive mode can used in scripts.
 
 # Prompts
@@ -30,8 +30,8 @@ Following options can be provided for a web application
 
 # Example
 
-create-app web -i -n "John Smith" -p my-app
+build-any-app web -i -n "John Smith" -p my-app
 
-create-app web -n "John Smith" -p my-app --private --publish -i
+build-any-app web -n "John Smith" -p my-app --private --publish -i
 
-create-app web -f react --cicd github-actions -n "John Doe" -p my-app -u react-bootstrap -s zustand -t typescript eslint jest prettier commitizen husky --private false
+build-any-app web -f react --cicd github-actions -n "John Doe" -p my-app -u react-bootstrap -s zustand -t typescript eslint jest prettier commitizen husky --private false
