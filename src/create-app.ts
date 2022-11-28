@@ -6,6 +6,7 @@ import {
 	namePrompt,
 	privateProjectPrompt,
 	projectNamePrompt,
+	publishProjectPrompt,
 	staticToolsPrompt,
 } from 'utils/prompts'
 import yargs from 'yargs'
@@ -20,6 +21,7 @@ declare type BaseArguments = {
 	cicd?: string
 	interactive?: boolean
 	private?: boolean
+	publish?: boolean
 }
 
 const program = yargs(hideBin(process.argv))
@@ -55,6 +57,10 @@ const createApp = () => {
 			describe: 'Is your project private?',
 			type: 'boolean',
 		})
+		.option('--publish', {
+			describe: 'Do you wish to publish your project?',
+			type: 'boolean',
+		})
 		.option('--static-tools', {
 			alias: 't',
 			describe: 'The static tools you want to use for your web application.',
@@ -80,6 +86,12 @@ const createApp = () => {
 				'Private option',
 				privateProjectPrompt,
 				argv.private
+			)
+
+			const publishProject = await setArgument<boolean>(
+				'Publish project option',
+				publishProjectPrompt,
+				argv.publish
 			)
 
 			const staticTools =
@@ -112,6 +124,7 @@ const createApp = () => {
 			global.rootDir = rootDir
 			global.cicd = cicd
 			global.privateProject = privateProject
+			global.publishProject = publishProject
 			global.useTs = staticTools.includes('typescript')
 		})
 		.command(webCommand)

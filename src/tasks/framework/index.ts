@@ -51,7 +51,7 @@ const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 				writeToRoot(
 					'config-overrides.js',
 					`
-						// eslint-disable-next-line no-undef
+						${useEslint ? '// eslint-disable-next-line no-undef' : ''}
 						module.exports = function override(config) {
 							const loaders = config.module.rules[1].oneOf
 							loaders.splice(
@@ -89,7 +89,15 @@ const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 			}
 
 			if (useCommitizen) {
-				pkgJson.scripts.commit = 'cz'
+				pkgJson.scripts.commit = 'git-cz'
+				pkgJson.config = { commitizen: { path: './node_modules/cz-git' } }
+			}
+
+			if (global.publishProject) {
+				pkgJson.scripts['semantic-release'] = 'semantic-release'
+				pkgJson.publishConfig = {
+					access: global.privateProject ? 'private' : 'public',
+				}
 			}
 
 			if (useJest) {

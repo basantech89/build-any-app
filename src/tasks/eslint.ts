@@ -51,7 +51,6 @@ const eslint = ({ devDeps, libs }: TaskArgs) => {
 			'plugin:@typescript-eslint/recommended'
 		)
 		devDeps.push(
-			'eslint',
 			'@typescript-eslint/eslint-plugin',
 			'@typescript-eslint/parser'
 		)

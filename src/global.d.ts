@@ -6,6 +6,7 @@ declare global {
 	var useTs: boolean
 	var interactive: boolean
 	var privateProject: boolean
+	var publishProject: boolean
 }
 
 export {}

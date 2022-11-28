@@ -39,3 +39,8 @@ export const privateProjectPrompt = new Confirm({
 	name: 'privateProject',
 	message: 'Is your project private?',
 })
+
+export const publishProjectPrompt = new Confirm({
+	name: 'publishProject',
+	message: 'Do you wish to publish your project?',
+})
