@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/basantech89/create-app/compare/v1.0.0...v1.0.1) (2022-11-28)
+
+
+### 🐛 Bug Fixes
+
+* **tooling:** add publish config to package json ([da50278](https://github.com/basantech89/create-app/commit/da50278c8cf6eac208f33cb33bc350f6f1622c6e))
+
 ## 1.0.0 (2022-11-28)
 
 
