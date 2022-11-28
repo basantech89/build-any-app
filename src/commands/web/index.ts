@@ -71,6 +71,7 @@ const webCommand = {
 			.commitizen()
 			.husky()
 			.cicd()
+			.publish()
 
 		await runCommandsIgnoreOp(`yarn add ${deps.join(' ')}`)
 		greenLogger.info('Installed dependencies')

@@ -10,7 +10,7 @@ const husky = async ({ devDeps }: TaskArgs) => {
 	writeToRoot(
 		'.husky/commit-msg',
 		`
-      #!/bin/sh
+      #!/usr/bin/env sh
       . "$(dirname "$0")/_/husky.sh"
 
       yarn commitlint --edit "$1" 
@@ -20,7 +20,7 @@ const husky = async ({ devDeps }: TaskArgs) => {
 	writeToRoot(
 		'.husky/pre-commit',
 		`
-      #!/bin/sh
+      #!/usr/bin/env sh
       . "$(dirname "$0")/_/husky.sh"
 
       yarn lint-staged

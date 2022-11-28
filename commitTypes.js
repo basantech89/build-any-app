@@ -1,0 +1,102 @@
+const commitTypes = [
+	{
+		value: 'feat',
+		name: 'feat:     🎉  A new feature',
+		emoji: ':tada:',
+		section: '🎉 Features',
+	},
+	{
+		value: 'module',
+		name: 'module:   ✨  A new module',
+		emoji: ':sparkles:',
+		section: '🎉 Features',
+	},
+	{
+		value: 'fix',
+		name: 'fix:      🐛  A bug fix',
+		emoji: ':bug:',
+		section: '🐛 Bug Fixes',
+	},
+	{
+		value: 'hotfix',
+		name: 'hotfix:   🚑  Critical hotfix',
+		emoji: ':ambulance:',
+		section: '🐛 Bug Fixes',
+	},
+	{
+		value: 'docs',
+		name: 'docs:     📝  Documentation only changes',
+		emoji: ':memo:',
+		section: '📝 Documentation',
+		hidden: true,
+	},
+	{
+		value: 'style',
+		name: 'style:    💄  Changes that do not affect the meaning of the code',
+		emoji: ':lipstick:',
+		section: '💄 Styles',
+		hidden: true,
+	},
+	{
+		value: 'refactor',
+		name: 'refactor: ♻️  A code change that neither fixes a bug nor adds a feature',
+		emoji: ':recycle:',
+		section: '♻️ Code Refactoring',
+		hidden: true,
+	},
+	{
+		value: 'perf',
+		name: 'perf:     🚀  A code change that improves performance',
+		emoji: ':rocket:',
+		section: '🚀 Performance Improvements',
+	},
+	{
+		value: 'test',
+		name: 'test:     ✅  Adding missing tests or correcting existing tests',
+		emoji: ':white_check_mark:',
+		section: '✅ Tests',
+		hidden: true,
+	},
+	{
+		value: 'build',
+		name: 'build:    👷  Changes that affect the build system or external dependencies',
+		emoji: ':construction_worker:',
+		section: '👷 Build System',
+		hidden: true,
+	},
+	{
+		value: 'ci',
+		name: 'ci:       💚  Changes to our CI configuration files and scripts',
+		emoji: ':green_heart:',
+		section: '💚 Continuous Integration',
+		hidden: true,
+	},
+	{
+		value: 'chore',
+		name: "chore:    🚚  Other changes that don't modify src or test files",
+		emoji: ':truck:',
+		section: '🚚 Miscellaneous Chores',
+		hidden: true,
+	},
+	{
+		value: 'revert',
+		name: 'revert:   ⏪️ Reverts a previous commit',
+		emoji: ':rewind:',
+		section: '⏪️ Reverts',
+	},
+	{
+		value: 'wip',
+		name: 'wip:      🚧  Work in progress',
+		emoji: ':construction:',
+		section: '🚧 Work In Progress',
+		hidden: true,
+	},
+	{
+		value: 'security',
+		name: 'security: 🔒  Fixing security issues',
+		emoji: ':lock:',
+		section: '🔒 Security Fixes',
+	},
+]
+
+module.exports = commitTypes

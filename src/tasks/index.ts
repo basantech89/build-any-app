@@ -9,6 +9,8 @@ import prettier from './prettier'
 import typescript from './typescript'
 import uiTask from './ui'
 
+import publish from 'tasks/publish'
+
 export interface TaskCommon {
 	deps: string[]
 	devDeps: string[]
@@ -42,6 +44,7 @@ declare type Tasks = {
 	commitizen: Task<Tasks>
 	husky: Task<Tasks>
 	cicd: Task<Tasks>
+	publish: Task<Tasks>
 } & TaskCommon
 
 declare type ExtraTools = {
@@ -69,6 +72,7 @@ const createTasks = (tools: string[], extraTools: ExtraTools): Tasks => {
 		jestTask: tools.includes('jest'),
 		framework: extraTools.framework,
 		cicd: global.cicd !== 'None',
+		publish: global.publishProject,
 	}
 
 	function createTask(taskFn: TaskFn): () => Tasks {
@@ -99,6 +103,7 @@ const createTasks = (tools: string[], extraTools: ExtraTools): Tasks => {
 		commitizen: createTask(commitizen),
 		husky: createTask(husky),
 		cicd: createTask(cicd),
+		publish: createTask(publish),
 	}
 }
 
