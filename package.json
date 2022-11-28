@@ -1,16 +1,16 @@
 {
-	"name": "create-app",
-	"version": "1.0.0",
-	"description": "Create your web application",
+	"name": "build-any-app",
+	"version": "1.0.1",
+	"description": "Create your application",
 	"keywords": [],
 	"license": "ISC",
 	"author": "Basant Soni",
 	"main": "dist/index.js",
 	"bin": {
-		"create-app": "dist/index.js"
+		"build-any-app": "dist/index.js"
 	},
 	"scripts": {
-		"create-app": "ts-node --experimental-specifier-resolution node -T src/index.ts",
+		"build-any-app": "ts-node --experimental-specifier-resolution node -T src/index.ts",
 		"prebuild": "rimraf dist",
 		"build": "babel src --extensions .js,.ts --out-dir dist",
 		"lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
