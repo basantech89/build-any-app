@@ -20,13 +20,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
-          cache: 'yarn'
+          cache: 'npm'
       - name: Dependencies Installation
-        run: yarn install --prefer-offline
+        run: npm install --prefer-offline
       - name: Build
-        run: yarn build
+        run: npm run build
       - name: NPM Release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn semantic-release
+        run: npm run semantic-release

@@ -1,6 +1,6 @@
 import { AppStructure } from '.'
 
-import { writeToRoot } from 'utils'
+import { writeToRoot } from 'utils/fs'
 
 function state(this: AppStructure, deps: string[], globalStateLib?: string) {
 	const useRedux = globalStateLib === 'redux'
@@ -58,7 +58,7 @@ function state(this: AppStructure, deps: string[], globalStateLib?: string) {
         import { RootState } from '.'
 
         import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-        import { addTodo as apiAddTodo, fetchTodos } from 'utils/api'
+        import { addTodo as apiAddTodo, fetchTodos } from 'src/services/api'
 
         type Status = 'idle' | 'pending' | 'success' | 'failed'
 
@@ -174,7 +174,7 @@ function state(this: AppStructure, deps: string[], globalStateLib?: string) {
           fetchTodos,
           removeTodo as apiRemoveTodo,
           updateTodo as apiUpdateTodo
-        } from 'utils/api'
+        } from 'src/services/api'
         import create from 'zustand'
         import { immer } from 'zustand/middleware/immer'
 
@@ -253,7 +253,7 @@ function state(this: AppStructure, deps: string[], globalStateLib?: string) {
 		writeToRoot(
 			'src/store/users.ts',
 			`
-        import { fetchUsers } from 'utils/api'
+        import { fetchUsers } from 'src/services/api'
         import create from 'zustand'
         import { immer } from 'zustand/middleware/immer'
 

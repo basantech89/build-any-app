@@ -14,13 +14,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
-          cache: 'yarn'
+          cache: 'npm'
       - name: Dependencies Installation
-        run: yarn install --prefer-offline
+        run: npm install --prefer-offline
       - name: Build
-        run: yarn build
+        run: npm run build
       - name: Test
-        run: yarn test
+        run: npm run test
       - name: Codecov Upload
         uses: codecov/codecov-action@v3
         with:
@@ -36,11 +36,11 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           debug: true
-          coverageCommand: yarn test
+          coverageCommand: npm run test
           coverageLocations: |
             ${{github.workspace}}/coverage/lcov.info:lcov
       - name: NPM Release Dry Run
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn semantic-release --dry-run
+        run: npm run semantic-release --dry-run

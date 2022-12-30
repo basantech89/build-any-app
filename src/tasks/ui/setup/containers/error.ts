@@ -1,4 +1,4 @@
-import { writeToRoot } from 'utils'
+import { writeToRoot } from 'utils/fs'
 
 export const noMatch = () => {
 	writeToRoot(

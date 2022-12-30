@@ -1,9 +1,7 @@
-import { writeObjToRoot, writeToRoot } from '../../../utils/index'
 import { StaticContent } from '../static-content'
 
-import { copyToRoot } from '../../../utils/index'
-
 import path from 'path'
+import { copyToRoot, writeObjToRoot, writeToRoot } from 'utils/fs'
 
 function createPublicDir(this: StaticContent) {
 	writeToRoot(

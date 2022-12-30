@@ -1,8 +1,9 @@
-import { readJsonFromRoot, writeObjToRoot, writeToRoot } from '../../utils'
 import { TaskArgs } from '..'
 
 import setupAbstractions from './abstractions'
 import createStaticContent from './static-content'
+
+import { readJsonFromRoot, writeObjToRoot, writeToRoot } from 'utils/fs'
 
 const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 	const {
@@ -11,6 +12,7 @@ const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 		usePrettier,
 		useJest,
 		useCommitizen,
+		useHusky,
 		framework,
 		uiLib,
 		globalStateLib,
@@ -83,9 +85,9 @@ const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 				start: `${script} start`,
 				build: `${script} build`,
 				eject: `${script} eject`,
-				postinstall: 'sort-package-json',
-				validate:
-					'npm-run-all --parallel test:coverage check-types check-format',
+				validate: `npm-run-all --parallel test:coverage ${
+					useTs ? 'check-types' : ''
+				} check-format`,
 			}
 
 			if (useCommitizen) {
@@ -93,10 +95,10 @@ const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 				pkgJson.config = { commitizen: { path: './node_modules/cz-git' } }
 			}
 
-			if (global.publishProject) {
+			if (global.publishPackage) {
 				pkgJson.scripts['semantic-release'] = 'semantic-release'
 				pkgJson.publishConfig = {
-					access: global.privateProject ? 'private' : 'public',
+					access: global.privatePackage ? 'private' : 'public',
 				}
 			}
 
@@ -135,8 +137,15 @@ const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 				],
 			}
 
-			pkgJson.author = global.author
-			pkgJson.private = global.privateProject
+			if (global.user.name) {
+				pkgJson.author = global.user.name
+			}
+
+			if (global.user.description) {
+				pkgJson.description = global.user.description
+			}
+
+			pkgJson.private = Boolean(global?.privatePackage)
 
 			writeObjToRoot('package.json', pkgJson)
 		})
@@ -169,8 +178,16 @@ const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 		`
 	)
 
-	const content = createStaticContent()
-	content.public().gitignore().env().readme()
+	const content = createStaticContent(
+		useTs,
+		useCommitizen,
+		useJest,
+		useEslint,
+		usePrettier,
+		useHusky,
+		uiLib
+	)
+	content.public().gitignore().env().readme().license()
 
 	const abstractions = setupAbstractions(useJest, globalStateLib)
 	abstractions
@@ -180,4 +197,5 @@ const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 		.state(deps, globalStateLib)
 }
 
+framework.displayName = 'framework'
 export default framework

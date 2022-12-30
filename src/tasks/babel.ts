@@ -1,6 +1,6 @@
 import { TaskArgs } from '.'
 
-import { writeToRoot } from 'utils'
+import { writeToRoot } from 'utils/fs'
 
 const babel = ({ devDeps, libs }: TaskArgs) => {
 	const { useTs } = libs
@@ -38,4 +38,5 @@ const babel = ({ devDeps, libs }: TaskArgs) => {
 	)
 }
 
+babel.displayName = 'babel'
 export default babel

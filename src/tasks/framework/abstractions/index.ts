@@ -3,7 +3,7 @@ import routes from './routes'
 import state from './state'
 import utils from './utils'
 
-import { writeToRoot } from 'utils'
+import { writeToRoot } from 'utils/fs'
 
 export declare interface AppStructure {
 	routes: () => AppStructure

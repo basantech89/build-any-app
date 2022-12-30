@@ -52,7 +52,5 @@ export const warmLogger = createLogger('verbose', 'ca-warn.json')
 
 export const greenLogger = createLogger('success', 'ca-green.json')
 
-if (process.env.NODE_ENV !== 'production') {
-	warmLogger.add(new winston.transports.Console())
-	greenLogger.add(new winston.transports.Console())
-}
+warmLogger.add(new winston.transports.Console())
+greenLogger.add(new winston.transports.Console())

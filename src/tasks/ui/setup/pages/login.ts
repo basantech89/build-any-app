@@ -1,4 +1,4 @@
-import { writeToRoot } from 'utils/index'
+import { writeToRoot } from 'utils/fs'
 
 const login = () => {
 	writeToRoot(
@@ -14,7 +14,7 @@ const login = () => {
       import { useNavigate } from 'react-router-dom'
       import { useRecoilState } from 'recoil'
       import { setItem } from 'utils'
-      import { authenticateUser } from 'utils/api'
+      import { authenticateUser } from 'src/services/api'
 
       export declare interface LoginForm {
         email: string

@@ -32,4 +32,5 @@ const jestTask = ({ devDeps, libs }: TaskArgs) => {
 	setupMSW()
 }
 
+jestTask.displayName = 'jest'
 export default jestTask

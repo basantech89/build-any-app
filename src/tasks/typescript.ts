@@ -1,6 +1,6 @@
 import { TaskArgs } from '.'
 
-import { writeObjToRoot } from 'utils'
+import { writeObjToRoot } from 'utils/fs'
 
 const tsConfig = {
 	compilerOptions: {
@@ -30,4 +30,5 @@ const typescript = ({ devDeps }: TaskArgs) => {
 	writeObjToRoot('tsconfig.json', tsConfig)
 }
 
+typescript.displayName = 'typescript'
 export default typescript

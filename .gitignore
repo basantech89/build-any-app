@@ -4,3 +4,4 @@ dist
 coverage
 ca-green.json
 ca-warn.json
+.env

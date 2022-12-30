@@ -1,8 +1,8 @@
 import { TaskArgs } from '.'
 
-import { writeToRoot } from 'utils'
+import { writeToRoot } from 'utils/fs'
 
-const commitizen = async ({ devDeps }: TaskArgs) => {
+const commitizen = ({ devDeps }: TaskArgs) => {
 	devDeps.push('cz-git', '@commitlint/cli', '@commitlint/config-conventional')
 
 	writeToRoot(
@@ -10,10 +10,13 @@ const commitizen = async ({ devDeps }: TaskArgs) => {
 		`
 			/* eslint-disable no-undef */
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			const commitTypes = require("./commitTypes");
+			const { commitRegex, commitTypes } = require('./commitUtils')
 
 			module.exports = {
-			  extends: ["gitmoji"],
+				extends: ['@commitlint/config-conventional'],
+				parserPreset: {
+					parserOpts: { headerPattern: commitRegex },
+				},
 			  rules: {
 			    "header-max-length": [2, "always", 150],
 			    "type-enum": [
@@ -85,113 +88,126 @@ const commitizen = async ({ devDeps }: TaskArgs) => {
 	)
 
 	writeToRoot(
-		'commitTypes.js',
+		'commitUtils.js',
 		`
 			const commitTypes = [
 			  {
 			    value: "feat",
 			    name: "feat:     🎉  A new feature",
-			    emoji: ":tada:",
+			    emoji: "🎉",
 			    section: "🎉 Features",
 			  },
 			  {
 			    value: "module",
 			    name: "module:   ✨  A new module",
-			    emoji: ":sparkles:",
+			    emoji: "✨",
 			    section: "🎉 Features",
 			  },
 			  {
 			    value: "fix",
 			    name: "fix:      🐛  A bug fix",
-			    emoji: ":bug:",
+			    emoji: "🐛",
 			    section: "🐛 Bug Fixes",
 			  },
 			  {
 			    value: "hotfix",
 			    name: "hotfix:   🚑  Critical hotfix",
-			    emoji: ":ambulance:",
+			    emoji: "🚑",
 			    section: "🐛 Bug Fixes",
 			  },
 			  {
 			    value: "docs",
 			    name: "docs:     📝  Documentation only changes",
-			    emoji: ":memo:",
+			    emoji: "📝",
 			    section: "📝 Documentation",
 			    hidden: true,
 			  },
 			  {
 			    value: "style",
 			    name: "style:    💄  Changes that do not affect the meaning of the code",
-			    emoji: ":lipstick:",
+			    emoji: "💄",
 			    section: "💄 Styles",
 			    hidden: true,
 			  },
 			  {
 			    value: "refactor",
 			    name: "refactor: ♻️  A code change that neither fixes a bug nor adds a feature",
-			    emoji: ":recycle:",
+			    emoji: "♻️",
 			    section: "♻️ Code Refactoring",
 			    hidden: true,
 			  },
 			  {
 			    value: "perf",
 			    name: "perf:     🚀  A code change that improves performance",
-			    emoji: ":rocket:",
+			    emoji: "🚀",
 			    section: "🚀 Performance Improvements",
 			  },
 			  {
 			    value: "test",
 			    name: "test:     ✅  Adding missing tests or correcting existing tests",
-			    emoji: ":white_check_mark:",
+			    emoji: "✅",
 			    section: "✅ Tests",
 			    hidden: true,
 			  },
 			  {
 			    value: "build",
 			    name: "build:    👷  Changes that affect the build system or external dependencies",
-			    emoji: ":construction_worker:",
+			    emoji: "👷",
 			    section: "👷 Build System",
 			    hidden: true,
 			  },
 			  {
 			    value: "ci",
 			    name: "ci:       💚  Changes to our CI configuration files and scripts",
-			    emoji: ":green_heart:",
+			    emoji: "💚",
 			    section: "💚 Continuous Integration",
 			    hidden: true,
 			  },
 			  {
 			    value: "chore",
 			    name: "chore:    🚚  Other changes that don't modify src or test files",
-			    emoji: ":truck:",
+			    emoji: "🚚",
 			    section: "🚚 Miscellaneous Chores",
 			    hidden: true,
 			  },
 			  {
 			    value: "revert",
 			    name: "revert:   ⏪️ Reverts a previous commit",
-			    emoji: ":rewind:",
+			    emoji: "⏪️",
 			    section: "⏪️ Reverts",
 			  },
 			  {
 			    value: "wip",
 			    name: "wip:      🚧  Work in progress",
-			    emoji: ":construction:",
+			    emoji: "🚧",
 			    section: "🚧 Work In Progress",
 			    hidden: true,
 			  },
 			  {
 			    value: "security",
 			    name: "security: 🔒  Fixing security issues",
-			    emoji: ":lock:",
+			    emoji: "🔒",
 			    section: "🔒 Security Fixes",
 			  },
+			  {
+					value: 'init',
+					name: 'beers: 🍻  Initial commit',
+					emoji: '🍻',
+					section: '🚧 Work In Progress',
+					hidden: true,
+				},
 			];
 			
+			const commitRegex =
+				/^(?:(?:\\ud83c[\\udf00-\\udfff])|(?:\\ud83d[\\udc00-\\ude4f\\ude80-\\udeff])|[\\u2600-\\u2B55])\\s(?<type>\\w*)(?:\\((?<scope>.*)\\))?!?:\\s(?<subject>(?:(?!#).)*(?:(?!\\s).))(?:\\s\\(?\\)?)?$/
+			
+			const commitUtils = { commitTypes, commitRegex }
+
 			// eslint-disable-next-line no-undef
-			module.exports = commitTypes
+			module.exports = commitUtils
 		`
 	)
 }
 
+commitizen.displayName = 'commitizen'
 export default commitizen

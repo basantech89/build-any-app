@@ -1,3 +1,5 @@
+import { WebArguments } from '../commands/web'
+
 import babel from './babel'
 import cicd from './cicd'
 import commitizen from './commitizen'
@@ -9,6 +11,7 @@ import prettier from './prettier'
 import typescript from './typescript'
 import uiTask from './ui'
 
+import contribution from 'tasks/contribution'
 import publish from 'tasks/publish'
 
 export interface TaskCommon {
@@ -24,86 +27,91 @@ export declare interface TaskArgs extends TaskCommon {
 		useEslint: boolean
 		useBabel: boolean
 		useCommitizen: boolean
+		useHusky: boolean
+		useCodecov: boolean
+		useCodeClimate: boolean
 		framework?: string
 		uiLib?: string
 		globalStateLib?: string
 	}
 }
 
-declare type Task<T> = () => T
-declare type TaskFn = (tools: TaskArgs) => void
-
-declare type Tasks = {
-	framework: Task<Tasks>
-	eslint: Task<Tasks>
-	jest: Task<Tasks>
-	prettier: Task<Tasks>
-	babel: Task<Tasks>
-	typescript: Task<Tasks>
-	ui: Task<Tasks>
-	commitizen: Task<Tasks>
-	husky: Task<Tasks>
-	cicd: Task<Tasks>
-	publish: Task<Tasks>
-} & TaskCommon
-
-declare type ExtraTools = {
-	framework?: string
-	uiLib?: string
-	globalStateLib?: string
+declare interface Task {
+	(props: TaskArgs): Promise<void> | void
+	displayName: string
 }
 
-const createTasks = (tools: string[], extraTools: ExtraTools): Tasks => {
+const createTasks = (
+	staticTools: NonNullable<WebArguments['staticTools']>,
+	codeQualityTools: NonNullable<WebArguments['codeQualityTools']>,
+	frameworkUsed: WebArguments['framework'],
+	uiLib: WebArguments['ui'],
+	globalStateLib: WebArguments['stateLibrary']
+): { tasks: ReturnType<Task>[]; deps: string[]; devDeps: string[] } => {
 	const deps: string[] = []
 	const devDeps: string[] = []
 
 	const libs = {
-		useTs: tools.includes('typescript'),
-		useEslint: tools.includes('eslint'),
-		useJest: tools.includes('jest'),
-		usePrettier: tools.includes('prettier'),
-		useBabel: true || tools.includes('babel'),
-		useCommitizen: tools.includes('commitizen'),
-		...extraTools,
+		useTs: staticTools.includes('typescript'),
+		useEslint: staticTools.includes('eslint'),
+		useJest: staticTools.includes('jest'),
+		usePrettier: staticTools.includes('prettier'),
+		useBabel: true,
+		useCommitizen: staticTools.includes('commitizen'),
+		useHusky: staticTools.includes('husky'),
+		useCodecov: codeQualityTools.includes('codecov'),
+		useCodeClimate: codeQualityTools.includes('code-climate'),
+		framework: frameworkUsed,
+		uiLib,
+		globalStateLib,
 	}
 
-	const tasks = {
-		uiTask: extraTools.uiLib,
-		jestTask: tools.includes('jest'),
-		framework: extraTools.framework,
-		cicd: global.cicd !== 'None',
-		publish: global.publishProject,
+	const tasksToPerform = ['babel', 'contribution']
+
+	if (!staticTools.includes('None')) {
+		tasksToPerform.push(...staticTools)
 	}
 
-	function createTask(taskFn: TaskFn): () => Tasks {
-		const taskName = taskFn.name
-		const isTaskAllowed =
-			tools.includes(taskName) ||
-			(taskName in tasks && !!tasks[taskName as keyof typeof tasks])
-
-		return function (this: Tasks) {
-			if (isTaskAllowed) {
-				taskFn({ deps, devDeps, libs })
-			}
-
-			return this
+	if (
+		global.gitProvider !== 'None' &&
+		global.cicd !== 'None' &&
+		!codeQualityTools.includes('None')
+	) {
+		tasksToPerform.push('cicd')
+		if (global.publishPackage) {
+			tasksToPerform.push('publish')
 		}
 	}
 
+	if (frameworkUsed) {
+		tasksToPerform.push('framework')
+	}
+
+	if (uiLib) {
+		tasksToPerform.push('uiTask')
+	}
+
+	const tasks = [
+		framework,
+		eslint,
+		prettier,
+		jestTask,
+		babel,
+		typescript,
+		uiTask,
+		commitizen,
+		husky,
+		cicd,
+		publish,
+		contribution,
+	]
+
+	const filterTasks = (task: Task) => tasksToPerform.includes(task.displayName)
+
 	return {
+		tasks: tasks.filter(filterTasks).map(task => task({ libs, deps, devDeps })),
 		deps,
 		devDeps,
-		eslint: createTask(eslint),
-		jest: createTask(jestTask),
-		prettier: createTask(prettier),
-		babel: createTask(babel),
-		typescript: createTask(typescript),
-		framework: createTask(framework),
-		ui: createTask(uiTask),
-		commitizen: createTask(commitizen),
-		husky: createTask(husky),
-		cicd: createTask(cicd),
-		publish: createTask(publish),
 	}
 }
 
