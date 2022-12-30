@@ -1,3 +1,14 @@
+## [2.0.0](https://github.com/basantech89/create-app/compare/v1.0.2...v2.0.0) (2022-12-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** Provision the git provider with additional features
+
+### 🎉 Features
+
+* **core:** add new task to add contributors for the project ([3359b05](https://github.com/basantech89/create-app/commit/3359b0526a5bcd08eb98d76ffedc1d396c8e6ae6))
+
 ## [1.0.2](https://github.com/basantech89/create-app/compare/v1.0.1...v1.0.2) (2022-11-28)
 
 
