@@ -1,14 +1,26 @@
 import { afterAll, beforeAll, jest } from '@jest/globals'
 import * as utils from 'utils'
 
+jest.mock('fs-extra', () => ({
+	ensureDir: (dirName: string) => {},
+	pathExistsSync: (dirName: string) => {},
+}))
+
+jest.mock('simple-git', () => {
+	const obj = {
+		init: (bare: boolean, options: any) => obj,
+		add: (files: string) => obj,
+		commit: (msg: string) => obj,
+	}
+
+	return { simpleGit: (rootDir?: string) => obj }
+})
+
 jest
 	.spyOn(utils, 'setArgument')
-	.mockReturnValueOnce(Promise.resolve('John Doe'))
+	.mockReturnValueOnce(Promise.resolve('None'))
 	.mockReturnValueOnce(Promise.resolve('test'))
-	.mockReturnValueOnce(Promise.resolve(false))
-	.mockReturnValueOnce(Promise.resolve(false))
 	.mockReturnValueOnce(Promise.resolve(['eslint', 'jest']))
-	.mockReturnValueOnce(Promise.resolve('github-actions'))
 
 jest.mock('utils/prompts', () => ({
 	namePrompt: { run: () => Promise.resolve('John Doe') },

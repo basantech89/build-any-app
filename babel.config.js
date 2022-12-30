@@ -1,22 +1,41 @@
 const config = api => {
 	const isTest = api.env('test')
 
+	const presets = [
+		[
+			'@babel/preset-env',
+			{
+				modules: 'commonjs',
+				targets: {
+					node: '14',
+				},
+			},
+		],
+		'@babel/preset-typescript',
+	]
+
+	if (!isTest) {
+		presets.push([
+			'minify',
+			{
+				mangle: {
+					topLevel: true,
+				},
+			},
+		])
+	}
+
 	return {
 		ignore: isTest
 			? ['dist']
-			: ['dist', 'src/__tests__', 'src/mocks', 'src/global.d.ts'],
-		presets: [
-			[
-				'@babel/preset-env',
-				{
-					modules: isTest ? 'commonjs' : false,
-					targets: {
-						node: 'current',
-					},
-				},
-			],
-			'@babel/preset-typescript',
-		],
+			: [
+					'dist',
+					'src/__tests__',
+					'src/mocks',
+					'src/global.d.ts',
+					'src/enquirer.d.ts',
+			  ],
+		presets,
 		plugins: [
 			[
 				require.resolve('babel-plugin-module-resolver'),
@@ -24,6 +43,7 @@ const config = api => {
 					root: ['./src'],
 					alias: {
 						utils: './src/utils',
+						tasks: './src/tasks',
 					},
 				},
 			],

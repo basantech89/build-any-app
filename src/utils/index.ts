@@ -1,237 +1,140 @@
-import createApp from '../create-app'
-
 import { gracefullyExit } from './handlers'
-import { greenLogger, warmLogger } from './logger'
 
-import { transformAsync } from '@babel/core'
-import { PromptRunner } from 'enquirer'
-import execa from 'execa'
+import { EnquirerOptions, PromptRunner } from 'enquirer'
 import fs from 'fs-extra'
-import prettier from 'prettier'
-import { prettierConfig } from 'tasks/prettier'
-import { inspect } from 'util'
-import which from 'which'
-import { ArgumentsCamelCase } from 'yargs'
+import sodium from 'libsodium-wrappers'
 
-export const runCli = async (args: string | ReadonlyArray<string>) => {
-	const parser = createApp()
-	return await new Promise(resolve => {
-		parser.parse(
-			args,
-			(err: Error | undefined, argv: ArgumentsCamelCase, output: string) => {
-				resolve(output)
-			}
-		)
-	})
-}
-
-export const runCommands = async (...commands: string[]) => {
-	const command = commands.join(' && ')
-	try {
-		const subprocess = await execa(command, {
-			shell: true,
-			cwd: global.rootDir,
-		})
-		greenLogger.success({ command, message: `${subprocess.stdout}` })
-	} catch (e) {
-		gracefullyExit(new Error((e as { stderr: string })?.stderr), command)
-	}
-}
-
-export const runCommandsIgnoreOp = async (...commands: string[]) => {
-	const command = commands.join(' && ')
-	try {
-		await execa(command, {
-			shell: true,
-			cwd: global.rootDir,
-			stdio: 'ignore',
-		})
-	} catch (e) {
-		gracefullyExit(new Error((e as { stderr: string })?.stderr), command)
-	}
-}
-
-export const isBinaryExist = async (
-	...programs: string[]
-): Promise<string[]> => {
-	const notExists = []
-
-	for (const program of programs) {
-		try {
-			await which(program)
-		} catch {
-			notExists.push(program)
-		}
-	}
-
-	return notExists
-}
-
-export const writeObjToRoot = (
-	filepath: string,
-	obj: Record<string, unknown>,
-	options = 'utf-8'
-) => {
-	const inspectedObj = inspect(obj, {
-		sorted: true,
-		compact: false,
-		depth: 20,
-	})
-
-	const fileExtension = filepath.split('.').at(-1)
-	const formattedObj = prettier.format(inspectedObj, {
-		...prettierConfig,
-		parser: fileExtension === 'js' ? 'json5' : 'json-stringify',
-	})
-
-	const file = `${global.rootDir}/${filepath}`
-	fs.outputFile(
-		file,
-		fileExtension === 'js'
-			? `
-			// eslint-disable-next-line no-undef
-			module.exports = ${formattedObj}
-			`
-			: formattedObj,
-		options
-	)
-		.then(() => greenLogger.success(`Successfully wrote ${file}`))
-		.catch(err => warmLogger.error(`Received error on writing ${file}: ${err}`))
-}
-
-export const getFileAssets = (fileLoc: string) => {
-	const pathArray = fileLoc.split('/')
-	const file = pathArray.at(-1) as string
-	const dotIdx = file.lastIndexOf('.')
-
-	const isNoExtension = dotIdx <= 0
-
-	if (isNoExtension) {
-		return { filepath: fileLoc, extension: '' }
-	}
-
-	let extension = file.substring(dotIdx + 1)
-	if (!global.useTs && (extension === 'ts' || extension === 'tsx')) {
-		extension = `j${extension?.substring(1)}`
-		const path = pathArray.slice(0, pathArray.length - 1).join('/')
-		const filename = path
-			? `${path}/${file.substring(0, dotIdx)}`
-			: file.substring(0, dotIdx)
-
-		return { extension, filepath: `${filename}.${extension}` }
-	}
-
-	return { filepath: fileLoc, extension }
-}
-
-export const getTranspiledContent = async (
-	content: string,
-	filepath: string
-) => {
-	const transpiled = await transformAsync(content, {
-		sourceType: 'module',
-		root: '../',
-		generatorOpts: {
-			retainLines: true,
-			compact: false,
-		},
-		parserOpts: {
-			strictMode: true,
-		},
-		filename: filepath,
-		presets: ['@babel/preset-typescript'],
-	})
-
-	return transpiled?.code || ''
-}
-
-export const prettyFormat = (
-	filepath: string,
-	extension: string,
-	content: string
-) => {
-	const extToParser = {
-		txt: 'sh',
-		md: 'mdx',
-		css: 'css',
-		scss: 'scss',
-		less: 'less',
-		ts: 'typescript',
-		tsx: 'typescript',
-		js: 'babel',
-		jsx: 'babel',
-		html: 'html',
-		yml: 'yaml',
-	}
-
-	if (!extension) {
-		prettierConfig.parser = 'sh'
-	} else if (extension in extToParser) {
-		prettierConfig.parser = extToParser[extension as keyof typeof extToParser]
-	} else {
-		prettierConfig.filepath = filepath
-	}
-
-	return prettier.format(content, prettierConfig)
-}
-
-export const writeToRoot = async (
-	tsFilepath: string,
-	content: string,
-	options = 'utf-8'
-) => {
-	const { filepath, extension } = getFileAssets(tsFilepath)
-	if (!global.useTs && (extension === 'js' || extension === 'jsx')) {
-		content = await getTranspiledContent(content, tsFilepath)
-	}
-
-	content = prettyFormat(filepath, extension, content)
-
-	const file = `${global.rootDir}/${filepath}`
-	fs.outputFile(file, content, options)
-		.then(() => greenLogger.success(`Successfully wrote ${file}`))
-		.catch(err => warmLogger.error(`Received error on writing ${file}: ${err}`))
-}
-
-export const readJsonFromRoot = (filepath: string) => {
-	const file = `${global.rootDir}/${filepath}`
-	return fs
-		.readJson(file)
-		.then(jsonObj => jsonObj)
-		.catch(err => {
-			warmLogger.error(
-				`Could not read from file ${file}.\nReceived error, ${err}`
-			)
-		})
-}
-
-export const copyToRoot = (srcpath: string, dest: string) => {
-	const destpath = `${global.rootDir}/${dest}`
-	return fs
-		.copy(srcpath, destpath)
-		.then(() =>
-			greenLogger.success(`Successfully copied ${srcpath} to ${destpath}`)
-		)
-		.catch(e => {
-			console.log(`Error copying ${e}`)
-			warmLogger.error(`Could not copy ${srcpath} to ${destpath}`)
-		})
-}
-
-export const setArgument = async <T>(
+export async function setArgument<T>(
 	argName: string,
-	prompt: PromptRunner<T>,
-	arg?: T
-) => {
+	prompt:
+		| ((validate?: EnquirerOptions<T>['validate']) => PromptRunner<T>)
+		| PromptRunner<T>,
+	arg: T | undefined,
+	validate?: EnquirerOptions<T>['validate']
+): Promise<T> {
 	if (typeof arg === 'undefined') {
 		if (global.interactive) {
-			arg = await prompt.run()
+			arg =
+				typeof prompt === 'function'
+					? await prompt(validate).run()
+					: await prompt.run()
 		} else {
 			gracefullyExit(new Error(`${argName} is not provided`))
+		}
+	} else if (validate) {
+		const isValueCorrect = await validate(arg)
+		if (typeof isValueCorrect === 'string') {
+			gracefullyExit(new Error(isValueCorrect))
 		}
 	}
 
 	return arg as T
 }
 
-export { greenLogger, warmLogger }
+export const pathExist = async (repoName: string) => {
+	const pathString = `${process.cwd()}/${repoName}`
+	const pathExist = await fs.pathExists(pathString)
+	if (pathExist) {
+		return `Path ${pathString} already exist.`
+	}
+
+	return true
+}
+
+export const encryptSecret = async (key: string, secret: string) => {
+	return sodium.ready.then(() => {
+		// Convert Secret & Base64 key to Uint8Array.
+		const binKey = sodium.from_base64(key, sodium.base64_variants.ORIGINAL)
+		const binSec = sodium.from_string(secret)
+
+		//Encrypt the secret using LibSodium
+		const encBytes = sodium.crypto_box_seal(binSec, binKey)
+
+		// Convert encrypted Uint8Array to Base64
+		return sodium.to_base64(encBytes, sodium.base64_variants.ORIGINAL)
+	})
+}
+
+const isObject = (obj: any) => {
+	if (typeof obj === 'object' && obj !== null) {
+		if (typeof Object.getPrototypeOf === 'function') {
+			const prototype = Object.getPrototypeOf(obj)
+			return prototype === Object.prototype || prototype === null
+		}
+
+		return Object.prototype.toString.call(obj) === '[object Object]'
+	}
+
+	return false
+}
+
+type TUnionToIntersection<U> = (
+	U extends any ? (k: U) => void : never
+) extends (k: infer I) => void
+	? I
+	: never
+
+export const deepMerge = <T extends Record<string, any>[]>(
+	...objects: T
+): TUnionToIntersection<T[number]> =>
+	objects.reduce((result, current) => {
+		Object.keys(current).forEach(key => {
+			if (Array.isArray(result[key]) && Array.isArray(current[key])) {
+				result[key] = Array.from(new Set(result[key].concat(current[key])))
+			} else if (isObject(result[key]) && isObject(current[key])) {
+				result[key] = deepMerge(result[key], current[key])
+			} else {
+				result[key] = current[key]
+			}
+		})
+
+		return result
+	}, {}) as any
+
+type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}`
+	? `${T}${Capitalize<SnakeToCamelCase<U>>}`
+	: S
+
+export type SnakeKeysToCamel<T extends Record<string, any>> = {
+	[K in keyof T as SnakeToCamelCase<Extract<K, string>>]: T[K]
+}
+
+export const camelCase = (str: string) =>
+	str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase())
+
+export function toCamelCaseKeys<T extends Record<string, any>>(
+	o: T
+): SnakeKeysToCamel<T>
+export function toCamelCaseKeys<T extends Record<string, any>[]>(
+	o: T
+): SnakeKeysToCamel<T>[]
+export function toCamelCaseKeys<
+	T extends Record<string, any> | Record<string, any>[]
+>(o: T): SnakeKeysToCamel<T>[] | SnakeKeysToCamel<T> {
+	if (o instanceof Array) {
+		return o.map(function (value) {
+			if (typeof value === 'object') {
+				value = toCamelCaseKeys(value)
+			}
+			return value as SnakeKeysToCamel<T>
+		})
+	} else {
+		const newO: Record<string, any> = {}
+
+		let origKey, newKey, value
+		for (origKey in o) {
+			if (Object.prototype.hasOwnProperty.call(o, origKey)) {
+				newKey = camelCase(origKey)
+				value = o[origKey]
+				if (
+					value instanceof Array ||
+					(value !== null && value.constructor === Object)
+				) {
+					value = toCamelCaseKeys(value)
+				}
+				newO[newKey] = value
+			}
+		}
+		return newO as SnakeKeysToCamel<T>
+	}
+}

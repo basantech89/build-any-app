@@ -1,6 +1,5 @@
-import { warmLogger } from '.'
-
 import { pathExistsSync, removeSync } from 'fs-extra'
+import { warmLogger } from 'utils/logger'
 
 export const cleanup = () => {
 	try {

@@ -1,6 +1,6 @@
 import { UIStructure } from './index'
 
-import { writeToRoot } from 'utils'
+import { writeToRoot } from 'utils/fs'
 
 function layouts(this: UIStructure) {
 	writeToRoot(

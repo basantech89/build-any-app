@@ -1,7 +1,10 @@
-const commitTypes = require('./commitTypes')
+const { commitRegex, commitTypes } = require('./commitUtils')
 
 module.exports = {
-	extends: ['gitmoji'],
+	extends: ['@commitlint/config-conventional'],
+	parserPreset: {
+		parserOpts: { headerPattern: commitRegex },
+	},
 	rules: {
 		'header-max-length': [2, 'always', 150],
 		'type-enum': [2, 'always', commitTypes.map(type => type.value)],

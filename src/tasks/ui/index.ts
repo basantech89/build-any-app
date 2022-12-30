@@ -14,4 +14,5 @@ const uiTask = ({ deps, devDeps, libs }: TaskArgs) => {
 	ui.layouts().components().pages(globalStateLib).assets(uiLib).containers()
 }
 
+uiTask.displayName = 'uiTask'
 export default uiTask

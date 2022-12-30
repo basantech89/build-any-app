@@ -1,6 +1,6 @@
 import { AppStructure } from '.'
 
-import { writeToRoot } from 'utils'
+import { writeToRoot } from 'utils/fs'
 
 function utils(this: AppStructure, globalStateLib?: string) {
 	const useRedux = globalStateLib === 'redux'

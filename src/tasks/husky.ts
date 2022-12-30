@@ -1,23 +1,28 @@
 import { TaskArgs } from '.'
 
-import { runCommands, writeObjToRoot, writeToRoot } from 'utils'
+import { runCommands } from 'utils/cli'
+import { writeObjToRoot, writeToRoot } from 'utils/fs'
 
-const husky = async ({ devDeps }: TaskArgs) => {
+const husky = async ({ libs, devDeps }: TaskArgs) => {
+	const { useCommitizen } = libs
+
 	devDeps.push('lint-staged')
 
-	await runCommands('npx husky-init && yarn')
+	await runCommands('npx husky-init')
 
-	writeToRoot(
-		'.husky/commit-msg',
-		`
+	if (useCommitizen) {
+		await writeToRoot(
+			'.husky/commit-msg',
+			`
       #!/usr/bin/env sh
       . "$(dirname "$0")/_/husky.sh"
 
       yarn commitlint --edit "$1" 
     `
-	)
+		)
+	}
 
-	writeToRoot(
+	await writeToRoot(
 		'.husky/pre-commit',
 		`
       #!/usr/bin/env sh
@@ -27,10 +32,11 @@ const husky = async ({ devDeps }: TaskArgs) => {
     `
 	)
 
-	writeObjToRoot('.lintstagedrc.json', {
+	await writeObjToRoot('.lintstagedrc.json', {
 		'*.+(js|jsx|ts|tsx)': ['eslint'],
 		'**/*.+(js|jsx|ts|tsx)': ['prettier --write'],
 	})
 }
 
+husky.displayName = 'husky'
 export default husky

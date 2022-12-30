@@ -1,5 +1,9 @@
+import regex from '../constants/regex'
+
 import { describe, expect, test } from '@jest/globals'
-import { getFileAssets, isBinaryExist } from 'utils'
+import { isBinaryExist } from 'utils/cli'
+import { getFileAssets } from 'utils/fs'
+import { toCamelCaseKeys } from 'utils/index'
 
 describe('which', () => {
 	test("isBinaryExist returns binaries that doesn't exist", async () => {
@@ -100,5 +104,82 @@ describe('getFileAssets', () => {
 		})
 
 		global.useTs = origUseTs
+	})
+})
+
+describe('regex', () => {
+	test('email regex', () => {
+		const emailRegex = regex.email
+		expect(emailRegex.test('abc@test.com')).toBe(true)
+		expect(emailRegex.test('abcccc@test.c')).toBe(true)
+		expect(emailRegex.test('abcccc@test')).toBe(false)
+		expect(emailRegex.test('abcccc@test.')).toBe(false)
+		expect(emailRegex.test('abcccc@')).toBe(false)
+		expect(emailRegex.test('abcccc')).toBe(false)
+	})
+
+	test('space regex', () => {
+		const spaceRegex = regex.space
+		expect(spaceRegex.test(' ')).toBe(true)
+		expect(spaceRegex.test('    ')).toBe(true)
+		expect(spaceRegex.test('  ')).toBe(true)
+		expect(spaceRegex.test('      ')).toBe(true)
+		expect(spaceRegex.test('test spaces')).toBe(true)
+		expect(spaceRegex.test('test spaces ')).toBe(true)
+		expect(spaceRegex.test('testspaces    ')).toBe(true)
+		expect(spaceRegex.test('')).toBe(false)
+		expect(spaceRegex.test('abc')).toBe(false)
+	})
+
+	test('commit regex', () => {
+		const commitRegex =
+			/^(?:(?:\ud83c[\udf00-\udfff])|(?:\ud83d[\udc00-\ude4f\ude80-\udeff])|[\u2600-\u2B55])\s(?<type>\w*)(?:\((?<scope>.*)\))?!?:\s(?<subject>(?:(?!#).)*(?:(?!\s).))(?:\s\(?\)?)?$/
+
+		expect(commitRegex.test("build-any-app - Initial commit'")).toBe(false)
+		expect(commitRegex.test("pkg-json: build-any-app - Initial commit'")).toBe(
+			false
+		)
+		expect(
+			commitRegex.test("init(pkg-json): build-any-app - Initial commit'")
+		).toBe(false)
+		expect(
+			commitRegex.test("🍻 pkg-json: build-any-app - Initial commit'")
+		).toBe(false)
+		expect(commitRegex.test('🍻 init(pkg-json)')).toBe(false)
+		expect(
+			commitRegex.test("🍻 init(pkg-json): build-any-app - Initial commit'")
+		).toBe(true)
+	})
+})
+
+describe('case keys', () => {
+	const obj = {
+		static_tools: ['tool1', 'tool2'],
+		'code-quality-tools': ['tool3', 'tool4'],
+		obj2: {
+			obj3: {
+				obj4: {
+					new_tools: ['tool5', 'tool6'],
+					'misc-tools': ['tool5', 'tool6'],
+				},
+			},
+		},
+	}
+
+	const expected = {
+		staticTools: ['tool1', 'tool2'],
+		codeQualityTools: ['tool3', 'tool4'],
+		obj2: {
+			obj3: {
+				obj4: {
+					newTools: ['tool5', 'tool6'],
+					miscTools: ['tool5', 'tool6'],
+				},
+			},
+		},
+	}
+
+	test('toCamelCaseKeys', () => {
+		expect(toCamelCaseKeys(obj)).toMatchObject(expected)
 	})
 })

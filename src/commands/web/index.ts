@@ -1,3 +1,5 @@
+import { BaseArguments } from '../../create-app'
+
 import {
 	frameworkPrompt,
 	frameworks,
@@ -8,14 +10,16 @@ import {
 } from './prompts'
 
 import createTasks from 'tasks'
-import { greenLogger, runCommandsIgnoreOp } from 'utils'
+import push from 'tasks/push'
+import { runCommands } from 'utils/cli'
+import { greenLogger, warmLogger } from 'utils/logger'
 import { ArgumentsCamelCase } from 'yargs'
 
-declare interface WebArguments {
+export declare interface WebArguments
+	extends Pick<BaseArguments, 'staticTools' | 'codeQualityTools'> {
 	framework?: string
 	ui?: string
 	stateLibrary?: string
-	staticTools: string[]
 }
 
 const webCommand = {
@@ -55,29 +59,31 @@ const webCommand = {
 			globalStateLib = await globalStateLibPrompt.run()
 		}
 
-		const staticTools = args.staticTools
+		const staticTools = args.staticTools || []
+		const codeQualityTools = args.codeQualityTools || []
 
-		const webTools = { framework, uiLib, globalStateLib }
+		const { tasks, deps, devDeps } = createTasks(
+			staticTools,
+			codeQualityTools,
+			framework,
+			uiLib,
+			globalStateLib
+		)
 
-		const tasks = createTasks([...staticTools, 'babel'], webTools)
-		const { deps, devDeps } = tasks
-			.framework()
-			.eslint()
-			.prettier()
-			.jest()
-			.babel()
-			.typescript()
-			.ui()
-			.commitizen()
-			.husky()
-			.cicd()
-			.publish()
-
-		await runCommandsIgnoreOp(`yarn add ${deps.join(' ')}`)
-		greenLogger.info('Installed dependencies')
-		await runCommandsIgnoreOp(`yarn add -D ${devDeps.join(' ')}`)
-		greenLogger.info('Installed dev dependencies')
-		await runCommandsIgnoreOp(`yarn lint:fix`)
+		Promise.all(tasks)
+			.then(() => {
+				greenLogger.info('Installing dependencies...')
+				const addDeps = runCommands(`yarn add ${deps.join(' ')}`)
+				const addDevDeps = runCommands(`yarn add -D ${devDeps.join(' ')}`)
+				Promise.all([addDeps, addDevDeps]).then(async () => {
+					greenLogger.info('Running eslint...')
+					await runCommands(`yarn lint:fix`)
+					greenLogger.info(`Pushing to ${global.gitProvider}...`)
+					await push()
+					greenLogger.silly('Done, duh!')
+				})
+			})
+			.catch(warmLogger.error)
 	},
 }
 

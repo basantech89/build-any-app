@@ -1,27 +1,66 @@
 import webCommand from './commands/web'
+import gitService from './services/git'
 
-import { greenLogger, runCommandsIgnoreOp, setArgument } from 'utils'
+import { cosmiconfigSync } from 'cosmiconfig'
+import fs from 'fs-extra'
+import { simpleGit } from 'simple-git'
+import { deepMerge, pathExist, setArgument } from 'utils'
+import { runCommands } from 'utils/cli'
+import { gracefullyExit } from 'utils/handlers'
+import { greenLogger, warmLogger } from 'utils/logger'
 import {
+	cicdChoices,
 	cicdPrompt,
-	namePrompt,
-	privateProjectPrompt,
-	projectNamePrompt,
-	publishProjectPrompt,
+	CodeQualityTools,
+	codeQualityToolsChoices,
+	codeQualityToolsPrompt,
+	gitProviderChoices,
+	gitProviderPrompt,
+	licenseChoicePrompt,
+	npmTokenPrompt,
+	NullableGitProvider,
+	privatePackagePrompt,
+	privateRepoPrompt,
+	publishPackagePrompt,
+	repoNamePrompt,
+	staticToolChoices,
+	StaticTools,
 	staticToolsPrompt,
+	tokenPrompt,
 } from 'utils/prompts'
-import yargs from 'yargs'
-import { ArgumentsCamelCase } from 'yargs'
+import { getUserInfo } from 'utils/userInfoPrompt'
+import yargs, { ArgumentsCamelCase } from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
-declare type BaseArguments = {
+export declare type BaseArguments = {
 	name?: string
-	projectName?: string
-	staticTools?: string[]
-	t?: string[]
-	cicd?: string
+	packageName?: string
+	repoName?: string
+	staticTools?: StaticTools
+	t?: StaticTools
+	codeQualityTools?: CodeQualityTools
+	c?: CodeQualityTools
+	cicd?: typeof cicdChoices[number]
 	interactive?: boolean
-	private?: boolean
+	privatePackage?: boolean
+	privateRepo?: boolean
 	publish?: boolean
+	provider?: NullableGitProvider
+	token?: string
+	npmToken?: string
+	description?: string
+	license?: string
+	debug?: boolean
+}
+
+export declare interface UserInfo {
+	description?: string
+	license?: string
+	email: string
+	name: string
+	packageName: string
+	privateRepo: boolean
+	privatePackage: boolean
 }
 
 const program = yargs(hideBin(process.argv))
@@ -34,97 +73,228 @@ const createApp = () => {
 			'$0 web -f react -u awesome-ui -s redux my-app',
 			'Create a web application with react, awesome-ui and redux.'
 		)
-		.option('--name', {
+		.option('name', {
 			alias: 'n',
-			describe: 'Your name',
+			describe: 'Author name',
 			type: 'string',
 		})
-		.option('--project-name', {
+		.option('repo-name', {
+			alias: 'r',
+			describe: 'Repository name',
+			type: 'string',
+		})
+		.option('description', {
+			alias: 'd',
+			describe: 'Project description',
+			type: 'string',
+		})
+		.option('package-name', {
 			alias: 'p',
-			describe: 'Project name',
+			describe: 'Package name',
 			type: 'string',
 		})
-		.option('--interactive', {
+		.option('interactive', {
 			alias: 'i',
 			describe: 'Ask prompts interactively',
 			type: 'boolean',
 		})
-		.option('--cicd', {
+		.option('cicd', {
 			describe: 'CI-CD',
-			type: 'string',
+			choices: cicdChoices,
 		})
-		.option('--private', {
-			describe: 'Is your project private?',
+		.option('private-package', {
+			alias: 'private-pkg',
+			describe: 'Is your package private?',
 			type: 'boolean',
 		})
-		.option('--publish', {
+		.option('private-repo', {
+			describe: 'Is your repo private?',
+			type: 'boolean',
+		})
+		.option('publish', {
 			describe: 'Do you wish to publish your project?',
 			type: 'boolean',
 		})
-		.option('--static-tools', {
+		.option('debug', {
+			describe: 'Run the app in debug mode?',
+			type: 'boolean',
+		})
+		.option('provider', {
+			describe: 'Git Provider',
+			choices: gitProviderChoices,
+		})
+		.option('license', {
+			alias: 'l',
+			describe: 'Project License',
+			type: 'string',
+		})
+		.option('token', {
+			describe: 'Git provider token',
+			type: 'string',
+		})
+		.option('npmToken', {
+			describe: 'NPM Token',
+			type: 'string',
+		})
+		.option('static-tools', {
 			alias: 't',
 			describe: 'The static tools you want to use for your web application.',
 			type: 'array',
-			global: true,
+			choices: staticToolChoices,
+		})
+		.option('code-quality-tools', {
+			alias: 'c',
+			describe: 'The static tools you want to use for your web application.',
+			type: 'array',
+			choices: codeQualityToolsChoices,
 		})
 		.middleware(async (argv: ArgumentsCamelCase<BaseArguments>) => {
-			global.interactive = !!argv.interactive
+			const explorer = cosmiconfigSync('build-any-app')
+			const configInfo = explorer.search()
+			let config = argv
+			if (configInfo && !configInfo.isEmpty) {
+				greenLogger.silly(
+					'Config file found, merging the config options with cli options.'
+				)
+				config = deepMerge(configInfo.config, argv)
+			}
 
-			const name = await setArgument<string>(
-				'Author Name',
-				namePrompt,
-				argv.name
+			global.interactive = !!config.interactive
+			global.debug = !!config.debug
+
+			const gitProvider = await setArgument(
+				'Git Provider',
+				gitProviderPrompt,
+				config.provider
 			)
 
-			const projectName = await setArgument<string>(
-				'Project Name',
-				projectNamePrompt,
-				argv.projectName
+			const repoName = await setArgument(
+				'Repository Name',
+				repoNamePrompt,
+				config.repoName,
+				pathExist
 			)
 
-			const privateProject = await setArgument<boolean>(
-				'Private option',
-				privateProjectPrompt,
-				argv.private
+			global.gitProvider = gitProvider
+			global.repoName = repoName
+
+			const rootDir = `${process.cwd()}/${repoName}`
+			global.rootDir = rootDir
+
+			await fs.ensureDir(rootDir)
+			await runCommands('npm init -y')
+			await simpleGit(rootDir)
+				.init(false, {
+					'--quiet': null,
+					'--initial-branch': 'main',
+				})
+				.add('.')
+				.commit('🍻 init(pkg-json): build-any-app - Initial commit')
+
+			if (gitProvider !== 'None') {
+				const token = await setArgument('Token', tokenPrompt, config.token)
+
+				const git = gitService(gitProvider, token)
+				const user = await git.getUser()
+
+				if (!config.license) {
+					if (interactive) {
+						const licenses = await git.getLicenses()
+						const licensePrompt = licenseChoicePrompt(
+							licenses.map(license => license.name)
+						)
+						const licenseName = await licensePrompt.run()
+						global.license = await git.getLicense(licenseName)
+					} else {
+						warmLogger.warning(
+							'option --license is optional and not provided. Run the app in interactive mode to choose a license.'
+						)
+					}
+				} else {
+					global.license = await git.getLicense(config.license)
+				}
+
+				const repoExist = await git.repoExist(repoName)
+				if (repoExist) {
+					gracefullyExit(
+						new Error(
+							`Repo ${repoName} already exists on ${gitProvider}, Try a different repo name.`
+						)
+					)
+				}
+
+				const privateRepo = await setArgument(
+					'Private repo option',
+					privateRepoPrompt,
+					config.privateRepo
+				)
+
+				const cicd = await setArgument('Ci-CD Tool', cicdPrompt, config.cicd)
+
+				let npmToken = ''
+				if (cicd !== 'None') {
+					const publishPackage = await setArgument(
+						'Publish project option',
+						publishPackagePrompt,
+						config.publish
+					)
+
+					if (publishPackage) {
+						const privatePackage = await setArgument(
+							'Private package option',
+							privatePackagePrompt,
+							config.privatePackage
+						)
+
+						npmToken = await setArgument(
+							'NPM Token',
+							npmTokenPrompt,
+							config.npmToken
+						)
+
+						const authorName = config.name || user.name
+
+						const info: Partial<UserInfo> = {
+							name: authorName,
+							description: config.description,
+							packageName: config.packageName,
+						}
+
+						const userInfo = await getUserInfo(info, publishPackage)
+
+						global.privatePackage = privatePackage
+						global.publishPackage = publishPackage
+						global.user = { ...userInfo, ...user }
+					}
+
+					argv.codeQualityTools = await setArgument(
+						'Code Quality Tools',
+						codeQualityToolsPrompt,
+						config.c
+					)
+				}
+
+				git.initialize().then(repo => {
+					global.repoSSHUrl = repo?.ssh_url
+					if (publishPackage && npmToken) {
+						// repo secret can only be created once the repo has been created on the git provider
+						git.createRepoSecret('NPM_TOKEN', npmToken)
+					}
+				})
+
+				global.cicd = cicd
+				global.privateRepo = privateRepo
+			}
+
+			const staticTools = await setArgument(
+				'Static Tools',
+				staticToolsPrompt,
+				config.t
 			)
 
-			const publishProject = await setArgument<boolean>(
-				'Publish project option',
-				publishProjectPrompt,
-				argv.publish
-			)
-
-			const staticTools =
-				(await setArgument<string[]>(
-					'Static Tools',
-					staticToolsPrompt,
-					argv.t
-				)) || []
-
-			const cicd = await setArgument<string>(
-				'Ci-CD Tool',
-				cicdPrompt,
-				argv.cicd
-			)
-
-			argv.projectName = projectName
+			argv.repoName = repoName
 			argv.staticTools = staticTools
 
-			// const rootDir = path.join(__dirname, projectName as string)
-			const rootDir = `/mnt/d/repos/tests/${projectName as string}`
-
-			greenLogger.info(`Initializing a git repo ${projectName}`)
-			await runCommandsIgnoreOp(
-				`git init ${rootDir}`,
-				`cd ${rootDir}`,
-				'npm init -y'
-			)
-
-			global.author = name
-			global.rootDir = rootDir
-			global.cicd = cicd
-			global.privateProject = privateProject
-			global.publishProject = publishProject
 			global.useTs = staticTools.includes('typescript')
 		})
 		.command(webCommand)

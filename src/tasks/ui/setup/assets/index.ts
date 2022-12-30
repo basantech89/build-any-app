@@ -1,7 +1,7 @@
 import { UIStructure } from '../index'
 
 import path from 'path'
-import { copyToRoot, writeToRoot } from 'utils'
+import { copyToRoot, writeToRoot } from 'utils/fs'
 
 function assets(this: UIStructure, uiLib?: string) {
 	if (uiLib === 'react-bootstrap') {

@@ -1,6 +1,6 @@
 import { AppStructure } from '.'
 
-import { writeToRoot } from 'utils'
+import { writeToRoot } from 'utils/fs'
 
 function constants(this: AppStructure) {
 	writeToRoot(

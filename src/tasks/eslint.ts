@@ -1,6 +1,6 @@
 import { TaskArgs } from '.'
 
-import { writeObjToRoot } from 'utils'
+import { writeObjToRoot } from 'utils/fs'
 
 const eslint = ({ devDeps, libs }: TaskArgs) => {
 	const { usePrettier, useJest, useTs } = libs
@@ -68,4 +68,5 @@ const eslint = ({ devDeps, libs }: TaskArgs) => {
 	writeObjToRoot('.eslintrc', eslintConfig)
 }
 
+eslint.displayName = 'eslint'
 export default eslint

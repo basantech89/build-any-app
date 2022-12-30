@@ -1,4 +1,4 @@
-import { writeToRoot } from 'utils/index'
+import { writeToRoot } from 'utils/fs'
 
 const button = () => {
 	writeToRoot(

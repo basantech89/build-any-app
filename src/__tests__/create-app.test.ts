@@ -1,10 +1,10 @@
 import { describe, expect, test } from '@jest/globals'
-import { runCli } from 'utils'
+import { runCli } from 'utils/cli'
 
 describe('Help Output', () => {
-	test('create-app command returns help output', async () => {
+	test('build-any-app command returns help output', async () => {
 		const output = await runCli(['--help'])
-		expect(output).toContain('create-app')
+		expect(output).toContain('build-any-app')
 	})
 
 	test('web command returns help output', async () => {

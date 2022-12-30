@@ -1,4 +1,5 @@
-import { runCommands, writeToRoot } from 'utils'
+import { runCommands } from 'utils/cli'
+import { writeToRoot } from 'utils/fs'
 
 const setupMSW = () => {
 	writeToRoot(

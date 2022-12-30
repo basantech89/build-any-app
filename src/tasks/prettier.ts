@@ -1,7 +1,7 @@
 import { TaskArgs } from '.'
 
 import { Options } from 'prettier'
-import { writeObjToRoot } from 'utils'
+import { writeObjToRoot } from 'utils/fs'
 
 export const prettierConfig: Options = {
 	arrowParens: 'avoid',
@@ -10,7 +10,7 @@ export const prettierConfig: Options = {
 	insertPragma: false,
 	jsxBracketSameLine: false,
 	jsxSingleQuote: false,
-	printWidth: 100,
+	printWidth: 80,
 	proseWrap: 'always',
 	quoteProps: 'as-needed',
 	requirePragma: false,
@@ -18,7 +18,7 @@ export const prettierConfig: Options = {
 	singleQuote: true,
 	tabWidth: 2,
 	trailingComma: 'none',
-	useTabs: false,
+	useTabs: true,
 }
 
 const prettier = ({ devDeps }: TaskArgs) => {
@@ -26,4 +26,5 @@ const prettier = ({ devDeps }: TaskArgs) => {
 	writeObjToRoot('prettier.config.js', prettierConfig)
 }
 
+prettier.displayName = 'prettier'
 export default prettier
