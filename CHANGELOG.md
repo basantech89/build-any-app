@@ -1,3 +1,10 @@
+## [2.0.4](https://github.com/basantech89/create-app/compare/v2.0.3...v2.0.4) (2022-12-31)
+
+
+### 🐛 Bug Fixes
+
+* **core:** fix variable scopes ([835f445](https://github.com/basantech89/create-app/commit/835f44540841b42c43ea7d6b379821dd4a446288))
+
 ## [2.0.3](https://github.com/basantech89/create-app/compare/v2.0.2...v2.0.3) (2022-12-31)
 
 
