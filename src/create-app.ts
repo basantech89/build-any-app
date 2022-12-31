@@ -195,7 +195,7 @@ const createApp = () => {
 				const token = await setArgument('Token', tokenPrompt, config.token)
 
 				const git = gitService(gitProvider, token)
-				const user = await git.getUser()
+				let user = await git.getUser()
 
 				if (!config.license) {
 					if (interactive) {
@@ -232,8 +232,9 @@ const createApp = () => {
 				const cicd = await setArgument('Ci-CD Tool', cicdPrompt, config.cicd)
 
 				let npmToken = ''
+				let publishPackage = false
 				if (cicd !== 'None') {
-					const publishPackage = await setArgument(
+					publishPackage = await setArgument(
 						'Publish project option',
 						publishPackagePrompt,
 						config.publish
@@ -261,10 +262,10 @@ const createApp = () => {
 						}
 
 						const userInfo = await getUserInfo(info, publishPackage)
+						user = { ...user, ...userInfo }
 
 						global.privatePackage = privatePackage
 						global.publishPackage = publishPackage
-						global.user = { ...userInfo, ...user }
 					}
 
 					argv.codeQualityTools = await setArgument(
@@ -282,6 +283,7 @@ const createApp = () => {
 					}
 				})
 
+				global.user = user
 				global.cicd = cicd
 				global.privateRepo = privateRepo
 			}
