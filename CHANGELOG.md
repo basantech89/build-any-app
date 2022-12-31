@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/basantech89/create-app/compare/v2.0.1...v2.0.2) (2022-12-31)
+
+
+### 🐛 Bug Fixes
+
+* **core:** fix minor bugs ([7958415](https://github.com/basantech89/create-app/commit/795841512bf4e466c91053609a0dc025a9804c89))
+
 ## [2.0.1](https://github.com/basantech89/create-app/compare/v2.0.0...v2.0.1) (2022-12-31)
 
 
