@@ -206,7 +206,7 @@ const createApp = () => {
 						const licenseName = await licensePrompt.run()
 						global.license = await git.getLicense(licenseName)
 					} else {
-						warmLogger.warning(
+						warmLogger.warn(
 							'option --license is optional and not provided. Run the app in interactive mode to choose a license.'
 						)
 					}
