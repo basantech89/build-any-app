@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/basantech89/create-app/compare/v2.0.2...v2.0.3) (2022-12-31)
+
+
+### 🐛 Bug Fixes
+
+* **core:** fix the bug with logger ([abf97ed](https://github.com/basantech89/create-app/commit/abf97edd56644ecefa5f3a81f9d08ef01d8722c6))
+
 ## [2.0.2](https://github.com/basantech89/create-app/compare/v2.0.1...v2.0.2) (2022-12-31)
 
 
