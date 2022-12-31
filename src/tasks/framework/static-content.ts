@@ -22,7 +22,8 @@ const createStaticContent = (
 	const license = global.license
 	const publishPackage = global.publishPackage
 	const repoName = global.repoName
-	const packageName = global?.user?.packageName
+	const user = global.user
+	const packageName = user?.packageName
 	const gitProvider = global.gitProvider
 	const cicd = global.cicd
 
@@ -184,7 +185,7 @@ Thanks for being willing to contribute!
 > pull requests from branches on your fork. To do this, run:
 >
 ${
-	gitProvider !== 'None'
+	gitProvider !== 'None' && user?.username
 		? `
 > \`\`\`
 > git remote add upstream https://${gitProvider}.com/${user?.username}/${repoName}.git
@@ -278,7 +279,7 @@ requests! Thanks!
 https://app.egghead.io/playlists/how-to-contribute-to-an-open-source-project-on-github
 [all-contributors]: https://github.com/kentcdodds/all-contributors
 ${
-	gitProvider !== 'None'
+	gitProvider !== 'None' && user?.username
 		? `
 [issues]: https://${gitProvider}.com/${user?.username}/${repoName}/issues
 `
@@ -588,7 +589,7 @@ ${
 }
 
 ${
-	cicd === 'github'
+	cicd === 'github' && user?.username
 		? `
 [build-badge]: https://github.com/${user?.username}/${repoName}/actions/workflows/build.yml/badge.svg
 [build]: https://github.com/${user?.username}/${repoName}/actions/workflows/build.yml
