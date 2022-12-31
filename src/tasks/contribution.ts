@@ -5,7 +5,7 @@ import { greenLogger, warmLogger } from 'utils/logger'
 import { UserInfo } from 'utils/userInfoPrompt'
 
 const config = (user: User & UserInfo) => ({
-	projectName: user.packageName,
+	projectName: global.repoName,
 	projectOwner: user.username,
 	repoType: global.gitProvider,
 	repoHost: `https://${global.gitProvider}.com`,

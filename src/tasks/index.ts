@@ -66,7 +66,11 @@ const createTasks = (
 		globalStateLib,
 	}
 
-	const tasksToPerform = ['babel', 'contribution']
+	const tasksToPerform = ['babel']
+
+	if (global.gitProvider !== 'None') {
+		tasksToPerform.push('contribution')
+	}
 
 	if (!staticTools.includes('None')) {
 		tasksToPerform.push(...staticTools)
