@@ -48,7 +48,7 @@ const contribution = () => {
 			'You can use all contributors bot or cli to add contributors, visit https://allcontributors.org to know more'
 		)
 	} else {
-		warmLogger.warning(
+		warmLogger.warn(
 			'User info is not found. Ensure that a git provider is provided to fetch the user info.'
 		)
 	}
