@@ -145,6 +145,10 @@ const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 				pkgJson.description = global.user.description
 			}
 
+			if (global.license) {
+				pkgJson.license = global.license.name
+			}
+
 			pkgJson.private = Boolean(global?.privatePackage)
 
 			writeObjToRoot('package.json', pkgJson)
