@@ -1,3 +1,10 @@
+## [2.0.6](https://github.com/basantech89/build-any-app/compare/v2.0.5...v2.0.6) (2023-01-07)
+
+
+### 🐛 Bug Fixes
+
+* **tooling:** add package json extra fields, repository, bugs and homepage ([274d834](https://github.com/basantech89/build-any-app/commit/274d83419ba1fa141068062024dab6a5f4f9737d))
+
 ## [2.0.5](https://github.com/basantech89/build-any-app/compare/v2.0.4...v2.0.5) (2023-01-07)
 
 
