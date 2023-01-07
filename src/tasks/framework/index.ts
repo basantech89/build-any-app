@@ -149,6 +149,18 @@ const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 				pkgJson.license = global.license.key
 			}
 
+			if (global.gitProvider && global.repoHTTPUrl) {
+				pkgJson.repository = {
+					type: 'git',
+					url: global.repoHTTPUrl,
+				}
+
+				if (global.repoWebUrl) {
+					pkgJson.bugs = { url: `${repoWebUrl}/issues` }
+					pkgJson.homepage = global.repoWebUrl
+				}
+			}
+
 			pkgJson.private = Boolean(global?.privatePackage)
 
 			writeObjToRoot('package.json', pkgJson)

@@ -277,6 +277,8 @@ const createApp = () => {
 
 				git.initialize().then(repo => {
 					global.repoSSHUrl = repo?.ssh_url
+					global.repoHTTPUrl = repo?.http_url
+					global.repoWebUrl = repo?.web_url
 					if (publishPackage && npmToken) {
 						// repo secret can only be created once the repo has been created on the git provider
 						git.createRepoSecret('NPM_TOKEN', npmToken)
