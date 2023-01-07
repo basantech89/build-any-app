@@ -13,6 +13,8 @@
 [![downloads][downloads-badge]][npmcharts]
 [![version][version-badge]][package]
 
+<img src="build-any-app-white-logo.png" alt="drawing" height="700"/>
+
 Generate template of your apps dynamically. 
 
 Build-any-app can run in interactive mode with the option -i through which it prompts for an option if it's not provided.

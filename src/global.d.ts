@@ -17,6 +17,8 @@ declare global {
 	var user: (User & UserInfo) | undefined
 	var license: License | undefined
 	var repoSSHUrl: string | undefined
+	var repoHTTPUrl: string | undefined
+	var repoWebUrl: string | undefined
 	var debug: boolean | undefined
 }
 

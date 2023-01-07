@@ -1,9 +1,9 @@
 {
 	"name": "build-any-app",
 	"version": "2.0.5",
-	"description": "Create your application",
+	"description": "Create your application dynamically with user inputs.",
 	"license": "Apache License 2.0",
-	"author": "Basant Soni",
+	"author": "Basant Soni (https://basant.netlify.app/)",
 	"main": "dist/index.js",
 	"bin": {
 		"build-any-app": "dist/index.js"
@@ -111,5 +111,13 @@
 		"eslint",
 		"prettier",
 		"jest"
-	]
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/basantech89/build-any-app.git"
+	},
+	"bugs": {
+		"url": "https://github.com/basantech89/build-any-app/issues"
+	},
+	"homepage": "https://github.com/basantech89/build-any-app.git"
 }
