@@ -14,7 +14,7 @@ function createPublicDir(this: StaticContent) {
           <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="theme-color" content="#000000" />
-          <meta name="description" content="Web site created using create-app" />
+          <meta name="description" content="Web site created using build-any-app" />
           <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
           <!--
             manifest.json provides metadata used when your web app is installed on a
@@ -30,7 +30,7 @@ function createPublicDir(this: StaticContent) {
             work correctly both with client-side routing and a non-root public URL.
             Learn how to configure a non-root public URL by running \`npm run build\`.
           -->
-          <title>Create App</title>
+          <title>Build Any App</title>
         </head>
         <body>
           <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -51,8 +51,8 @@ function createPublicDir(this: StaticContent) {
 	)
 
 	writeObjToRoot('public/manifest.json', {
-		short_name: 'Create App',
-		name: 'Create App',
+		short_name: 'Build Any App',
+		name: 'Build Any App',
 		icons: [
 			{
 				src: 'favicon.ico',

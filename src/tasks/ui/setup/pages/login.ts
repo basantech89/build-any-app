@@ -1,6 +1,6 @@
 import { writeToRoot } from 'utils/fs'
 
-const login = () => {
+const login = (useJest: boolean) => {
 	writeToRoot(
 		'src/pages/Login/index.tsx',
 		`
@@ -14,7 +14,7 @@ const login = () => {
       import { useNavigate } from 'react-router-dom'
       import { useRecoilState } from 'recoil'
       import { setItem } from 'utils'
-      import { authenticateUser } from 'src/services/api'
+      import { authenticateUser } from 'utils/api'
 
       export declare interface LoginForm {
         email: string
@@ -96,9 +96,10 @@ const login = () => {
     `
 	)
 
-	writeToRoot(
-		'src/pages/__tests__/login.test.tsx',
-		`
+	if (useJest) {
+		writeToRoot(
+			'src/pages/Login/login.test.tsx',
+			`
 			import Login from '../Login'
 
 			import { axe } from 'jest-axe'
@@ -127,7 +128,8 @@ const login = () => {
 			  })
 			})
 		`
-	)
+		)
+	}
 }
 
 export default login

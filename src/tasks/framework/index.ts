@@ -146,7 +146,7 @@ const framework = ({ deps, devDeps, libs }: TaskArgs) => {
 			}
 
 			if (global.license) {
-				pkgJson.license = global.license.name
+				pkgJson.license = global.license.key
 			}
 
 			pkgJson.private = Boolean(global?.privatePackage)

@@ -83,7 +83,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/basantech89"><img src="https://avatars.githubusercontent.com/u/30287271?v=4?s=100" width="100px;" alt="Basant Soni"/><br /><sub><b>Basant Soni</b></sub></a><br /><a href="https://github.com/basantech89/create-app/issues?q=author%3Abasantech89" title="Bug reports">🐛</a> <a href="#blog-basantech89" title="Blogposts">📝</a> <a href="https://github.com/basantech89/create-app/commits?author=basantech89" title="Code">💻</a> <a href="#data-basantech89" title="Data">🔣</a> <a href="https://github.com/basantech89/create-app/commits?author=basantech89" title="Documentation">📖</a> <a href="#design-basantech89" title="Design">🎨</a> <a href="#example-basantech89" title="Examples">💡</a> <a href="#ideas-basantech89" title="Ideas, Planning, & Feedback">🤔</a> <a href="#infra-basantech89" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/basantech89/create-app/pulls?q=is%3Apr+reviewed-by%3Abasantech89" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/basantech89/create-app/commits?author=basantech89" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/basantech89"><img src="https://avatars.githubusercontent.com/u/30287271?v=4?s=100" width="100px;" alt="Basant Soni"/><br /><sub><b>Basant Soni</b></sub></a><br /><a href="https://github.com/basantech89/build-any-app/issues?q=author%3Abasantech89" title="Bug reports">🐛</a> <a href="#blog-basantech89" title="Blogposts">📝</a> <a href="https://github.com/basantech89/build-any-app/commits?author=basantech89" title="Code">💻</a> <a href="#data-basantech89" title="Data">🔣</a> <a href="https://github.com/basantech89/build-any-app/commits?author=basantech89" title="Documentation">📖</a> <a href="#design-basantech89" title="Design">🎨</a> <a href="#example-basantech89" title="Examples">💡</a> <a href="#ideas-basantech89" title="Ideas, Planning, & Feedback">🤔</a> <a href="#infra-basantech89" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/basantech89/build-any-app/pulls?q=is%3Apr+reviewed-by%3Abasantech89" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/basantech89/build-any-app/commits?author=basantech89" title="Tests">⚠️</a></td>
     </tr>
   </tbody>
   <tfoot>
@@ -121,8 +121,8 @@ Apache License 2.0
 [ts-badge]: https://badgen.net/badge/-/TypeScript/blue?icon=typescript&label
 [semantic-release-badge]: https://img.shields.io/badge/semantic--release-conventionalcommits-ff69b4?logo=semantic-release
 [semantic-release]: https://github.com/semantic-release/semantic-release
-[build-badge]: https://github.com/basantech89/create-app/actions/workflows/build.yml/badge.svg
-[build]: https://github.com/basantech89/create-app/actions/workflows/build.yml
+[build-badge]: https://github.com/basantech89/build-any-app/actions/workflows/build.yml/badge.svg
+[build]: https://github.com/basantech89/build-any-app/actions/workflows/build.yml
 [commitizen-badge]: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg
 [commitizen]: http://commitizen.github.io/cz-cli/
 [all-contrib-badge]: https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square
