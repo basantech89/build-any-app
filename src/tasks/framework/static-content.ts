@@ -362,7 +362,7 @@ ${
 						: ''
 				}
 
-This project was bootstrapped with [Create App](https://github.com/basantech89/create-app).
+This project was bootstrapped with [Build Any App](https://github.com/basantech89/build-any-app).
 
 ## Available Scripts
 
@@ -508,7 +508,7 @@ ${
 
 ## Learn More
 
-You can learn more in the [Build Any App documentation](https://github.com/basantech89/create-app).
+You can learn more in the [Build Any App documentation](https://github.com/basantech89/build-any-app).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
@@ -522,7 +522,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/basantech89"><img src="https://avatars.githubusercontent.com/u/30287271?v=4?s=100" width="100px;" alt="Basant Soni"/><br /><sub><b>Basant Soni</b></sub></a><br /><a href="https://github.com/basantech89/create-app/issues?q=author%3Abasantech89" title="Bug reports">🐛</a> <a href="#blog-basantech89" title="Blogposts">📝</a> <a href="https://github.com/basantech89/create-app/commits?author=basantech89" title="Code">💻</a> <a href="#data-basantech89" title="Data">🔣</a> <a href="https://github.com/basantech89/create-app/commits?author=basantech89" title="Documentation">📖</a> <a href="#design-basantech89" title="Design">🎨</a> <a href="#example-basantech89" title="Examples">💡</a> <a href="#ideas-basantech89" title="Ideas, Planning, & Feedback">🤔</a> <a href="#infra-basantech89" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/basantech89/create-app/pulls?q=is%3Apr+reviewed-by%3Abasantech89" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/basantech89/create-app/commits?author=basantech89" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/basantech89"><img src="https://avatars.githubusercontent.com/u/30287271?v=4?s=100" width="100px;" alt="Basant Soni"/><br /><sub><b>Basant Soni</b></sub></a><br /><a href="https://github.com/basantech89/build-any-app/issues?q=author%3Abasantech89" title="Bug reports">🐛</a> <a href="#blog-basantech89" title="Blogposts">📝</a> <a href="https://github.com/basantech89/build-any-app/commits?author=basantech89" title="Code">💻</a> <a href="#data-basantech89" title="Data">🔣</a> <a href="https://github.com/basantech89/build-any-app/commits?author=basantech89" title="Documentation">📖</a> <a href="#design-basantech89" title="Design">🎨</a> <a href="#example-basantech89" title="Examples">💡</a> <a href="#ideas-basantech89" title="Ideas, Planning, & Feedback">🤔</a> <a href="#infra-basantech89" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/basantech89/build-any-app/pulls?q=is%3Apr+reviewed-by%3Abasantech89" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/basantech89/build-any-app/commits?author=basantech89" title="Tests">⚠️</a></td>
     </tr>
   </tbody>
   <tfoot>

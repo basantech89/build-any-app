@@ -6,7 +6,7 @@ const header = () => {
 		`
       import './styles.scss'
 
-      import logo from 'assets/logos/create-app-logo.png'
+      import logo from 'assets/logos/build-any-app-logo.png'
       import darkTheme from 'assets/styles/themes/dark.lazy.scss'
       import lightTheme from 'assets/styles/themes/light.lazy.scss'
       import { routes } from 'constants/routes'

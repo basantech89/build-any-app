@@ -17,7 +17,7 @@ const signup = () => {
 			import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons'
 			import { useNavigate } from 'react-router-dom'
 			import { useRecoilState } from 'recoil'
-			import { registerUser } from 'src/services/api'
+			import { registerUser } from 'utils/api'
 			import { object, string } from 'yup'
 
 			export declare interface SignUpForm {

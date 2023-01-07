@@ -14,7 +14,7 @@ Thanks for being willing to contribute!
 > pull requests from branches on your fork. To do this, run:
 >
 > ```
-> git remote add upstream https://github.com/basantech89/create-app.git
+> git remote add upstream https://github.com/basantech89/build-any-app.git
 > git fetch upstream
 > git branch --set-upstream-to=upstream/main main
 > ```
@@ -65,4 +65,4 @@ requests! Thanks!
 [egghead]:
 https://app.egghead.io/playlists/how-to-contribute-to-an-open-source-project-on-github
 [all-contributors]: https://github.com/kentcdodds/all-contributors
-[issues]: https://github.com/basantech89/create-app/issues
+[issues]: https://github.com/basantech89/build-any-app/issues

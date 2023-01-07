@@ -5,8 +5,8 @@ import signup from './signup'
 import todos from './todos'
 import users from './users'
 
-function pages(this: UIStructure, globalStateLib?: string) {
-	login()
+function pages(this: UIStructure, useJest: boolean, globalStateLib?: string) {
+	login(useJest)
 	signup()
 	users(globalStateLib)
 	todos(globalStateLib)

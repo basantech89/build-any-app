@@ -29,7 +29,9 @@
 		"setup": "npm install && npm run validate",
 		"prepare": "husky install",
 		"commit": "git-cz",
-		"semantic-release": "semantic-release"
+		"semantic-release": "semantic-release",
+		"commitlint": "commitlint",
+		"lint-staged": "lint-staged"
 	},
 	"config": {
 		"commitizen": {

@@ -3,7 +3,7 @@ import { TaskArgs } from '..'
 import setupUI from './setup'
 
 const uiTask = ({ deps, devDeps, libs }: TaskArgs) => {
-	const { uiLib, globalStateLib } = libs
+	const { uiLib, globalStateLib, useJest } = libs
 
 	if (uiLib === 'react-bootstrap') {
 		deps.push('bootstrap', 'react-bootstrap', 'react-bootstrap-icons')
@@ -11,7 +11,11 @@ const uiTask = ({ deps, devDeps, libs }: TaskArgs) => {
 	}
 
 	const ui = setupUI()
-	ui.layouts().components().pages(globalStateLib).assets(uiLib).containers()
+	ui.layouts()
+		.components()
+		.pages(useJest, globalStateLib)
+		.assets(uiLib)
+		.containers()
 }
 
 uiTask.displayName = 'uiTask'

@@ -7,7 +7,7 @@ import pages from './pages'
 export declare interface UIStructure {
 	layouts: () => UIStructure
 	components: () => UIStructure
-	pages: (globalStateLib?: string) => UIStructure
+	pages: (useJest: boolean, globalStateLib?: string) => UIStructure
 	containers: () => UIStructure
 	assets: (ui?: string) => UIStructure
 }
