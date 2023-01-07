@@ -1,3 +1,10 @@
+## [2.0.5](https://github.com/basantech89/build-any-app/compare/v2.0.4...v2.0.5) (2023-01-07)
+
+
+### 🐛 Bug Fixes
+
+* **tooling:** minor fixes and app name changes ([30f8977](https://github.com/basantech89/build-any-app/commit/30f8977b545cdc9c084023e5e04884fb707fc29a))
+
 ## [2.0.4](https://github.com/basantech89/create-app/compare/v2.0.3...v2.0.4) (2022-12-31)
 
 
